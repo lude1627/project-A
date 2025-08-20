@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Form
 from fastapi.responses import HTMLResponse
-from Modulos.Login.logica.auth_consult import login_user, register_user
+from Modulos.Login.logica.auth_consultL import login_user, register_user
 
 router = APIRouter()
 
