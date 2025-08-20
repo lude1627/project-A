@@ -16,3 +16,18 @@ def register_user(id: int, username: str,phone: int, email: str, password: str):
     cursor.close()
     return True
 
+def update_user(id: int, username: str, phone: int, email: str, password: str):
+    cursor = conexion.cursor()
+    query = "UPDATE usuario SET User_name = %s, User_phone = %s, User_mail = %s, User_password = %s WHERE User_id = %s"
+    cursor.execute(query, (username, phone, email, password, id))
+    conexion.commit()
+    cursor.close()
+    return True
+
+def view_user(id: int):
+    cursor = conexion.cursor()
+    query = "SELECT * FROM usuario WHERE User_id = %s"
+    cursor.execute(query, (id,))
+    user = cursor.fetchone()
+    cursor.close()
+    return user
