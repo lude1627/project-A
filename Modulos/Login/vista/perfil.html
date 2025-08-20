@@ -20,6 +20,15 @@
     <button type="submit" onclick="location.href='/'">Cerrar sesion</button>
 
     <script>    
+
+    document.addEventListener('DOMContentLoaded', () => {
+
+        cargardatos();
+        // Your code here will run once the DOM is fully loaded and parsed.
+        // You can safely manipulate DOM elements within this block.
+        console.log('Document is ready with vanilla JavaScript!');
+    });
+    
     const userid = 1;
 
     async function cargardatos(){
@@ -32,7 +41,7 @@
         document.getElementById('password').value = data.password;
 
     }
-    cargardatos();
+    
 </script>
 </body>
 </html>
