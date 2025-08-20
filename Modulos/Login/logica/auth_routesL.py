@@ -25,18 +25,26 @@ def register():
 @router.post("/register", response_class=HTMLResponse)
 def register(id: int = Form(...), username: str = Form(...), phone: int = Form(...), email: str = Form(...), password: str = Form(...)):
     if register_user(id, username, phone, email, password):
-        return HTMLResponse(content="<script>alert('Usuario registrado exitosamente'); window.location.href='/login';</script>")
+        return HTMLResponse(content="<script>alert('Usuario registrado exitosamente'); window.location.href='/';</script>")
     else:
         return HTMLResponse(content="<script>alert('Error al registrar usuario'); window.location.href='/register';</script>")    
     
-@router.get("/updateP", response_class=HTMLResponse)
-def updateP():
+@router.get("/updateP/{id}", response_class=HTMLResponse)
+
+def updateP(id:int):
+     user = view_user(id)
+     if user:
+         with open("Modulos/Login/vista/perfil.html", "r", encoding= "utf-8") as f:
+             content = f.read()
+             content = content.replace("{{username}}", user.username)
+             content = content.replace("{{phone}}", str(user.phone))
+             content = content.replace("{{email}}", user.email)
+             return HTMLResponse(content=content)
      with open("Modulos/Login/vista/perfil.html", "r", encoding= "utf-8") as f:
         return HTMLResponse(content=f.read())
      
 @router.post("/updateP", response_class=HTMLResponse)
 def updateP(id: int = Form(...), username: str = Form(...), phone: int = Form(...), email: str = Form(...), password: str = Form(...)):
-    # colocaremos la funcion def view_user para obtener los datos del usuario y mostrarlos en el formulario segun el id con el que se inicio sesion
     if update_user(id, username, phone, email, password):
         return HTMLResponse(content="<script>alert('Usuario actualizado exitosamente'); window.location.href='/updateP';</script>")
     else:
