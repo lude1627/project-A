@@ -8,52 +8,53 @@
 
 <body>
     <h1>Módulo de Categorías</h1>
-
-    <form action="/category" method="post">
+    <form action="/categorySave" method="post">
         <input type="number" name="id" id="id" placeholder="ID" required> <br><br>
         <input type="text" name="name" id="name" placeholder="Nombre de la categoría" required> <br><br>
-        <button type="submit">Guardar</button>
+        <button type="submit">Agregar</button>
     </form>
 
-
-
     <h2>Lista de Categorías</h2>
-
-    <table border="1" style="width:40%">
+    <table border="1" style="width:50%; text-align:center;">
         <thead>
             <tr>
                 <th>ID</th>
                 <th>Nombre</th>
-                <th>Acción</th>
+                <th>Action</th>
             </tr>
         </thead>
-
-        <tbody>
-
-            <tr>
-                <td></td>
-                <td></td>
-                <td>
-                    <!-- Botón Editar -->
-                    <a href="/categorias/editar">Editar</a>
-                    &nbsp;|&nbsp;
-                    <!-- Botón Eliminar -->
-                    <a href="/categorias/eliminar"
-                        onclick="return confirm('¿Seguro que deseas eliminar esta categoría?');">
-                        Eliminar
-                    </a>
-                </td>
-            </tr>
+        <tbody id="tabla-categorias">
+            <!-- Aquí se insertan los datos -->
 
         </tbody>
     </table>
 
+    <script>
+        fetch("List_Category")  // Llamada al endpoint JSON
+            .then(response => response.json())
+            .then(data => {
+                const tbody = document.getElementById("tabla-categorias");
+                data.forEach(cat => {
+                    const row = `<tr>
+                                    <td>${cat.Cat_id}</td>
+                                    <td>${cat.Cat_name}</td>
+                                    <td>
+                                    <input type="button" value="Editar" onclick="location.href='#'">
+                                    <input type="button" value="Eliminar" onclick="location.href='#'">
+                                    </td>
+                                 </tr>`;
+                    tbody.innerHTML += row;
+                });
+            })
+            .catch(error => console.error("Error:", error));
+    </script>
 
     <br>
     <br>
-
     <input type="button" value="Cerrar sesion" onclick="location.href='/'">
-    
+
+
+
 </body>
 
 </html>
