@@ -5,7 +5,6 @@ from Modulos.Login.logica.auth_consultL import login_user, register_user, update
 router = APIRouter()
 
 
-# ---------------- LOGIN ----------------
 @router.get("/", response_class=HTMLResponse)
 def loger():
     with open("Modulos/Login/vista/login.html", "r", encoding="utf-8") as f:
@@ -16,13 +15,13 @@ def loger():
 def login(username: str = Form(...), password: str = Form(...)):
     user = login_user(username, password)
     if user:
-        user_id = user[0]  # asumimos que User_id es el primer campo
+        user_id = user[0] 
         return HTMLResponse(content=f"<script>alert('Bienvenid@ {username}'); window.location.href='/updateP?id={user_id}';</script>")
     else:
         return HTMLResponse(content="<script>alert('Usuario o contraseña incorrectos'); window.location.href='/';</script>")
 
 
-# ---------------- REGISTER ----------------
+
 @router.get("/register", response_class=HTMLResponse)
 def register():
     with open("Modulos/Login/vista/registro.html", "r", encoding="utf-8") as f:
@@ -37,7 +36,6 @@ def register(id: int = Form(...), username: str = Form(...), phone: int = Form(.
         return HTMLResponse(content="<script>alert('Error al registrar usuario'); window.location.href='/register';</script>")    
 
 
-# ---------------- PERFIL ----------------
 @router.get("/get_user/{id}")
 def get_user_json(id: int):
     user = view_user(id)
