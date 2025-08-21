@@ -38,28 +38,22 @@ def register(id: int = Form(...), username: str = Form(...), phone: int = Form(.
 
 
 # ---------------- PERFIL ----------------
-@router.get("/updateP", response_class=HTMLResponse)
-def get_user(id: int):
-    user = view_user(id)  # trae los datos desde la base de datos
-
+@router.get("/get_user/{id}")
+def get_user_json(id: int):
+    user = view_user(id)
     if not user:
-        return HTMLResponse(content="<h1>Usuario no encontrado</h1>")
-
-    user_dict = {
+        return {"error": "Usuario no encontrado"}
+    return {
         "id": user[0],
-        "nombre": user[1],
-        "telefono": user[2],
-        "correo": user[3],
+        "username": user[1],
+        "phone": user[2],
+        "email": user[3],
         "password": user[4]
     }
-
+@router.get("/updateP", response_class=HTMLResponse)
+def get_user_page():
     with open("Modulos/Login/vista/perfil.html", "r", encoding="utf-8") as f:
-        html_content = f.read()
-
-    for key, value in user_dict.items():
-        html_content = html_content.replace(f"{{{key}}}", str(value))
-
-    return HTMLResponse(content=html_content)
+        return HTMLResponse(content=f.read())
 
 
 
@@ -69,3 +63,4 @@ def updateP(id: int = Form(...), username: str = Form(...), phone: int = Form(..
         return HTMLResponse(content=f"<script>alert('Usuario actualizado exitosamente'); window.location.href='/updateP?id={id}';</script>")
     else:
         return HTMLResponse(content=f"<script>alert('Error al actualizar usuario'); window.location.href='/updateP?id={id}';</script>")
+

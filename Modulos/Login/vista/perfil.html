@@ -7,18 +7,37 @@
 </head>
 <body>
     
-    <form action="/updateP" method="post">
-        <h1>Datos Personales</h1>
-<input type="hidden" name="id" value="{id}">
-Nombre: <input type="text" name="username" value="{nombre}" required><br><br>
-Telefono: <input type="number" name="phone" value="{telefono}" required><br><br>
-Correo: <input type="email" name="email" value="{correo}" required><br><br>
-Contraseña: <input type="password" name="password" value="{password}" required><br><br>
-        <button type="submit">Editar</button>
-    </form>
-    <br><br>
-    <button type="submit" onclick="location.href='/'">Cerrar sesión</button>
+   <form id="perfilForm" action="/updateP" method="post">
+    <h1>Datos Personales</h1>
+    <input type="hidden" name="id" id="id">
+    Nombre: <input type="text" name="username" id="username" required><br><br>
+    Telefono: <input type="number" name="phone" id="phone" required><br><br>
+    Correo: <input type="email" name="email" id="email" required><br><br>
+    Contraseña: <input type="password" name="password" id="password" required><br><br>
+    <button type="submit">Editar</button>
+</form>
 
-    
+<script>
+    // 1. Obtener id del query string
+    const params = new URLSearchParams(window.location.search);
+    const userId = params.get('id');
+
+    // 2. Traer datos del usuario
+    fetch(`/get_user/${userId}`)
+        .then(res => res.json())
+        .then(data => {
+            if (!data.error) {
+                document.getElementById('id').value = data.id;
+                document.getElementById('username').value = data.username;
+                document.getElementById('phone').value = data.phone;
+                document.getElementById('email').value = data.email;
+                document.getElementById('password').value = data.password;
+            } else {
+                alert(data.error);
+            }
+        })
+        .catch(err => console.error(err));
+</script>
+
 </body>
 </html>
