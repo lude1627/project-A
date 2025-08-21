@@ -1,5 +1,5 @@
-from fastapi import APIRouter, Form
-from fastapi.responses import HTMLResponse
+from fastapi import APIRouter, Depends, Form, Request
+from fastapi.responses import HTMLResponse, RedirectResponse
 from Modulos.categoria.logica.auth_consultC import create_cat, view_cat, delete_cat
 
 router = APIRouter()
@@ -19,14 +19,24 @@ def create_category(id: int = Form(...), name: str = Form(...)):
 @router.get("/category/view", response_class=HTMLResponse)
 def view_categories():
     categories = view_cat()
+    rows = ""
     if categories:
-        content = "<h2>Categorías</h2><ul>"
         for cat in categories:
-            content += f"<li>{cat['Cat_name']} (ID: {cat['Cat_id']}) <a href='/category/delete?id={cat['Cat_id']}'>Eliminar</a></li>"
-        content += "</ul>"
-        return HTMLResponse(content=content)
+            rows += f"""
+            <tr>
+                <td>{cat['Cat_id']}</td>
+                <td>{cat['Cat_name']}</td>
+                <td><a href='/category/delete?id={cat['Cat_id']}'>Eliminar</a></td>
+            </tr>
+            """
     else:
-        return HTMLResponse(content="<script>alert('No hay categorías disponibles'); window.location.href='/category';</script>")
+        rows = "<tr><td colspan='3'>No hay categorías disponibles</td></tr>"
+
+    with open("Modulos/categoria/vista/categorias.html", "r", encoding="utf-8") as f:
+        html_content = f.read().replace("{{categorias}}", rows)
+
+    return HTMLResponse(content=html_content)
+
 @router.get("/category/delete", response_class=HTMLResponse)
 def delete_category(id: int):
     if delete_cat(id):
