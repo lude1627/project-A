@@ -1,12 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
+
+<style>
+table, th, td {
+  border:1px solid black;
+  text-align: center;
+}
+</style>
+
 <body>
-    
-    
+    <h1>Modulo de Categorias</h1>
+    <form action="/category/create" method="post">
+        <input type="text" name="name" placeholder="Nombre de la categoria" required>
+        <br>
+        <br>
+        <button type="submit">Guardar</button>
+        <br>
+        <br>
+    </form>
+
+    <button type="submit">Guardar</button>
+    <button type="submit">Guardar</button>
+
+
+    <table style="width: 30%">
+        <tr>
+            <th>C_Id</th>
+            <th>C_Nombre</th>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td>2</td>
+        </tr>
+        <tr>
+            <td>3</td>
+            <td>4</td>
+        </tr>
+    </table>
 </body>
+
 </html>
