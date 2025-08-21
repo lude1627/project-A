@@ -9,13 +9,12 @@ def create_cat(id: int, name: str):
     return True
 
 def view_cat():
-    cursor = conexion.cursor()
+    cursor = conexion.cursor(dictionary=True)
     query = "SELECT * FROM categorias"
     cursor.execute(query)
     categories = cursor.fetchall()
     cursor.close()
     return categories
-
 
 def delete_cat(id: int):
     cursor = conexion.cursor()
