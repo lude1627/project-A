@@ -2,7 +2,7 @@ from Modulos.db import conexion
 
 def create_product(name: str, description: str, cant: int, price: float):
     cursor = conexion.cursor()
-    query = "INSERT INTO producto (Product_name, Product_description Product_cant, Product_price) VALUES (%s, %s, %s, %s)"
+    query = "INSERT INTO productos (Product_name, Product_description, Product_cant, Product_price) VALUES (%s, %s, %s, %s)"
     cursor.execute(query, (name, description, cant, price))
     conexion.commit()
     cursor.close()
