@@ -3,7 +3,12 @@ from Modulos.db import conexion
 
 def view_product(id: int):
     cursor = conexion.cursor()
-    query = "SELECT * FROM productos WHERE Product_id = %s"
+    query = """
+        SELECT Product_id, Product_name, Product_description, 
+               Product_cant, Product_price, Cat_id
+        FROM productos
+        WHERE Product_id = %s
+    """
     cursor.execute(query, (id,))
     product = cursor.fetchone()
     cursor.close()
