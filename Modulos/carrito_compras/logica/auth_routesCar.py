@@ -1,9 +1,13 @@
-from fastapi import APIRouter, Form
+from fastapi import APIRouter, Form, HTTPException
 from fastapi.responses import HTMLResponse, JSONResponse
-from Modulos.carrito_compras.logica.auth_consultasCar import add_item, get_items, delete_item, conexion
+from Modulos.carrito_compras.logica.auth_consultasCar import get_items, eliminar_producto_db, conexion
 
 router = APIRouter()
 
+@router.get("/cart", response_class=HTMLResponse)
+def cart():
+    with open("Modulos/carrito_compras/vista/carrito.html", "r", encoding="utf-8") as f:
+        return HTMLResponse(content=f.read())
 
 def fetch_items_from_db():
     cursor = conexion.cursor(dictionary=True)
@@ -17,10 +21,7 @@ def get_items():
     carrito = fetch_items_from_db()
     return carrito
 
-@router.get("/cart", response_class=HTMLResponse)
-def cart():
-    with open("Modulos/carrito_compras/vista/carrito.html", "r", encoding="utf-8") as f:
-        return HTMLResponse(content=f.read())
+
     
 @router.get("/cart/list/data")
 def get_items():
@@ -35,21 +36,13 @@ def get_items():
         for c in carrito
     ]
     return JSONResponse(content=carritos_json)
-
-@router.post("/cart/add", response_class=HTMLResponse)
-def añadir_articulo(articulo: str = Form(...), precio: float = Form(...), cantidad: int = Form(...)):
-    if add_item(articulo, precio, cantidad):
-        return HTMLResponse(content="<script>alert(Articulo agregado)</script>")
+     
+@router.delete("/productos/eliminar/{id}")
+def eliminar_producto(id: int):
+    eliminado = eliminar_producto_db(id)
+    if eliminado:
+        return {"msg": f"Producto {id} eliminado"}
     else:
-        return HTMLResponse(content="<script>alert(Error al agregar)</script>")
-        
-@router.delete("/delete_item/{id}")
-def delete_item(id: int):
-    delete_item
-    cursor = conexion.cursor()
-    cursor.execute("DELETE FROM carrito WHERE id = %s", (id,))
-    conexion.commit()
-    cursor.close()
-    return {"message": "Producto eliminado"}
+        raise HTTPException(status_code=404, detail="Producto no encontrado")
 
 

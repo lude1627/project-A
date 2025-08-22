@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Carrito de Compras</title>
-     <style> 
+    <style>
         body {
             font-family: Arial, sans-serif;
             margin: 20px;
@@ -65,7 +65,7 @@
             color: #fff;
             margin-top: 20px;
         }
-    </style> 
+    </style>
 </head>
 
 <body onload="carrito()">
@@ -87,7 +87,7 @@
         </table>
 
         <div id="total"></div>
-        
+
     </form>
 
     <script>
@@ -125,54 +125,30 @@
                 console.error("Error al cargar los datos", err);
             }
         }
+
+        function eliminarProducto(id) {
+            if (confirm("¿Seguro que deseas eliminar este producto?")) {
+                fetch(`delete_item${id}`, {
+                    method: "DELETE"
+                })
+                    .then(res => {
+                        if (res.ok) {
+                            alert("Producto eliminado ✅");
+                            location.reload();
+                        } else {
+                            alert("Error al eliminar ❌");
+                        }
+                    })
+                    .catch(err => console.error("Error:", err));
+            }
+        }
+
+
     </script>
 
-    <!-- <script>
-    function eliminarProducto(id) {
-        if (confirm("¿Seguro que deseas eliminar este producto?")) {
-            fetch(`delete_item/${id}`, {   // <-- aquí el slash es clave
-                method: "DELETE"
-            })
-            .then(res => {
-                if (res.ok) {
-                    alert("Producto eliminado correctamente");
-                    location.reload(); // Recargar la página o actualizar la tabla
-                } else {
-                    alert("Error al eliminar el producto");
-                }
-            })
-            .catch(err => console.error("Error:", err));
-        }
-    }
-</script> -->
-
-
-
-
-<!-- Botón Comprar Todo
-<button type="button" class="btn btn-comprar" onclick="comprarTodo()">Comprar Todo</button>-->
-
-<!-- Aquí mostramos la factura (puede ser un modal o un div oculto) -->
-<!-- <div id="factura" style="display:none; border:1px solid #ccc; padding:15px; margin-top:15px;">
-    <h2>Factura Electrónica</h2>
-    <table border="1" style="width:100%; text-align:center;">
-        <thead>
-            <tr>
-                <th>Producto</th>
-                <th>Cantidad</th>
-                <th>Precio Unitario</th>
-                <th>Subtotal</th>
-            </tr>
-        </thead>
-        <tbody id="detalle-factura"></tbody>
-    </table>
-    <h3 id="total"></h3>
-</div>
-
-<br>
-<br>
-
-<button type="button" class="btn btn-salir" onclick="location.href='/'">Cerrar sesión</button> --> 
-
+    <button type="button" class="btn btn-comprar" onclick="location.href='#'">Comprar Todo</button>
+    <button type="button" class="btn btn-salir" onclick="location.href='/'">Cerrar sesión</button>
+    <button onclick="window.history.back()">⬅ Volver</button>
 </body>
+
 </html>
