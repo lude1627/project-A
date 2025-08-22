@@ -1,6 +1,6 @@
 #rutaspara la creacion y para la vista de productos
 from fastapi import APIRouter, Form
-from Modulos.productos.logica.auth_consultP import create_product,all_categories,all_products, delete_product
+from Modulos.productos.logica.auth_consultP import create_product,all_categories,all_products, delete_product,update_product,view_product
  
 from fastapi.responses import HTMLResponse, JSONResponse
 
@@ -78,3 +78,50 @@ def deleteP(id: int):
     delete_product(id)
   
     return {"message": "Producto eliminado con éxito"}
+
+
+@router.get("/get_product/{id}")
+def get_product(id: int):
+    product = view_product(id)
+    if not product:
+        return {"error": "Producto no encontrado"}
+    return {
+        "id": product[0],
+        "name": product[1],
+        "description": product[2],
+        "cant": product[3],
+        "price": product[4],
+        "category_id": product[5]
+    }
+
+
+@router.get("/edit_product", response_class=HTMLResponse)
+def get_product_page():
+    with open("Modulos/productos/view/edit_product.html", "r", encoding="utf-8") as f:
+        return HTMLResponse(content=f.read())
+
+
+@router.post("/edit_product", response_class=HTMLResponse)
+def edit_product(
+    id: int = Form(...),
+    name: str = Form(...),
+    description: str = Form(...),
+    category_id: int = Form(...),
+    cant: int = Form(...),
+    price: float = Form(...)
+):
+    success = update_product(id, name, description, category_id, cant, price)
+    if success:
+        return HTMLResponse(
+            content=f"<script>alert('Producto actualizado exitosamente'); window.location.href='/updateP?id={id}';</script>"
+        )
+    else:
+        return HTMLResponse(
+            content=f"<script>alert('Error al actualizar producto'); window.location.href='/updateP?id={id}';</script>"
+        )
+
+
+@router.get("/all_categories")
+def get_all_categories():
+    categorias = all_categories()  
+    return [{"id": c[0], "name": c[1]} for c in categorias]

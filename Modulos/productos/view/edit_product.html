@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Formulario de Producto</title>
+</head>
+<body>
+
+  <form id="productForm" action="/edit_product" method="post">
+    <h1>Formulario de Producto</h1>
+
+    <input type="hidden" name="id" id="id">
+
+    <label>Nombre:</label><br>
+    <input type="text" id="name" name="name" required><br>
+
+    <label>Descripción:</label><br>
+    <textarea id="description" name="description" required></textarea><br>
+
+    <label>Categoría:</label><br>
+    <select name="category_id" id="category_id" required>
+      <option value="">Seleccione una categoria</option>
+    </select><br><br>
+
+    <label>Cantidad:</label><br>
+    <input type="number" id="cant" name="cant" required><br>
+
+    <label>Precio:</label><br>
+    <input type="number" step="0.01" name="price" id="price" required><br><br>
+
+    <button type="submit" id="btnSubmit">Guardar Producto</button>
+    <button onclick="location.href='/view_product'">Volver</button>
+  </form>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const userId = params.get('id');
+
+   
+    function loadCategories(callback) {
+      fetch("/all_categories")
+        .then(res => res.json())
+        .then(data => {
+            let select = document.getElementById("category_id");
+            data.forEach(cat => {
+                let option = document.createElement("option");
+                option.value = cat.id;
+                option.text = cat.name;
+                select.appendChild(option);
+            });
+            if (callback) callback(); 
+        })
+        .catch(err => console.error("Error cargando categorías:", err));
+    }
+
+  
+    function loadProduct() {
+      if (userId) {
+        fetch(`/get_product/${userId}`)
+          .then(res => res.json())
+          .then(data => {
+              if (!data.error) {
+                  document.getElementById('id').value = data.id;
+                  document.getElementById('name').value = data.name;
+                  document.getElementById('description').value = data.description;
+                  document.getElementById('category_id').value = data.category_id;
+                  document.getElementById('cant').value = data.cant;
+                  document.getElementById('price').value = data.price;
+
+                  document.getElementById("btnSubmit").innerText = "Actualizar Producto";
+              } else {
+                  alert(data.error);
+              }
+          })
+          .catch(err => console.error("Error cargando producto:", err));
+      }
+    }
+
+    loadCategories(loadProduct);
+  </script>
+
+</body>
+</html>

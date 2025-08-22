@@ -6,7 +6,7 @@
     <title>Lista de Productos</title>
 </head>
 <body>
-    <h1>Lista de Productos</h1>
+    <h1>Productos Disponibles</h1>
     <input type="button" value="Agregar Producto" onclick="location.href='/create_product'">
     <br><br>
 
@@ -26,7 +26,6 @@
     </table>
 
     <script>
-        // 🚀 Cargar productos
         async function cargarProductos() {
             try {
                 const response = await fetch("/view_product/data");
@@ -44,7 +43,7 @@
                             <td>${p.categoria}</td>
                             <td>
                                 <button onclick="alert('${p.nombre} apartado')">Comprar</button>
-                                <input type="button" value="Editar" onclick="location.href='/create_product'">
+                                <input type="button" value="Editar" onclick="location.href='/edit_product'">
                                 <button onclick="eliminarProducto(${p.id})">Eliminar</button>
                             </td>
                         </tr>
@@ -57,7 +56,6 @@
             }
         }
 
-        // 🚀 Eliminar producto
         async function eliminarProducto(id) {
             if (!confirm("¿Seguro que deseas eliminar este producto?")) return;
 
@@ -69,10 +67,9 @@
             const data = await res.json();
             alert(data.message);
 
-            cargarProductos(); // 🔄 recargar tabla sin refrescar toda la página
+            cargarProductos(); 
         }
 
-        // Cargar productos al abrir
         cargarProductos();
     </script>
 </body>

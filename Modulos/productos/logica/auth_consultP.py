@@ -23,11 +23,21 @@ def all_products():
     cursor.close()
     return products
 
-def update_product(id: int, name: str, description: str, cant: int, price: float):
-    cursor = conexion.cursor()
-    query = "UPDATE productos SET Product_name = %s, Product_description = %s, Product_cant = %s, Product_price = %s WHERE Product_id = %s"
-    cursor.execute(query, (name, description, cant, price, id))
+def update_product(id: int, name: str, description: str, cant: int, price: float, cat_id: int) -> bool:
+    
+    cursor = conexion.sursor()
+    query = """
+                UPDATE productos 
+                SET Product_name = %s, 
+                    Product_description = %s, 
+                    Product_cant = %s, 
+                    Product_price = %s,
+                    Cat_id = %s
+                WHERE Product_id = %s
+            """
+    cursor.execute(query, (name, description, cant, price, cat_id, id))
     conexion.commit()
+
     cursor.close()
     return True
 
