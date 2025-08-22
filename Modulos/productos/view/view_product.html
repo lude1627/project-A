@@ -3,9 +3,77 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Lista de Productos</title>
 </head>
 <body>
-    
+    <h1>Lista de Productos</h1>
+    <input type="button" value="Agregar Producto" onclick="location.href='/create_product'">
+    <br><br>
+
+    <table border="1" style="width: 100%; text-align: center;">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Descripción</th>
+                <th>Cantidad</th>
+                <th>Precio</th>
+                <th>Categoría</th>
+                <th>Opciones</th>
+            </tr>
+        </thead>
+        <tbody id="user-table"></tbody>
+    </table>
+
+    <script>
+        // 🚀 Cargar productos
+        async function cargarProductos() {
+            try {
+                const response = await fetch("/view_product/data");
+                const productos = await response.json();
+
+                let rows = "";
+                productos.forEach(p => {
+                    rows += `
+                        <tr>
+                            <td>${p.id}</td>
+                            <td>${p.nombre}</td>
+                            <td>${p.descripcion}</td>
+                            <td>${p.cantidad}</td>
+                            <td>${p.precio}</td>
+                            <td>${p.categoria}</td>
+                            <td>
+                                <button onclick="alert('${p.nombre} apartado')">Comprar</button>
+                                <input type="button" value="Editar" onclick="location.href='/create_product'">
+                                <button onclick="eliminarProducto(${p.id})">Eliminar</button>
+                            </td>
+                        </tr>
+                    `;
+                });
+
+                document.getElementById("user-table").innerHTML = rows;
+            } catch (err) {
+                console.error("Error cargando productos:", err);
+            }
+        }
+
+        // 🚀 Eliminar producto
+        async function eliminarProducto(id) {
+            if (!confirm("¿Seguro que deseas eliminar este producto?")) return;
+
+            const res = await fetch(`/delete/${id}`, { method: "DELETE" });
+            if (!res.ok) {
+                alert("Error al eliminar el producto");
+                return;
+            }
+            const data = await res.json();
+            alert(data.message);
+
+            cargarProductos(); // 🔄 recargar tabla sin refrescar toda la página
+        }
+
+        // Cargar productos al abrir
+        cargarProductos();
+    </script>
 </body>
 </html>
