@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Form
-from fastapi.responses import HTMLResponse, RedirectResponse, JSONResponse
-from Modulos.carrito_compras.logica.auth_consultasCar import add_item, get_items, delete_item, get_total, conexion
+from fastapi.responses import HTMLResponse, JSONResponse
+from Modulos.carrito_compras.logica.auth_consultasCar import add_item, get_items, delete_item, conexion
 
 router = APIRouter()
 
@@ -45,6 +45,7 @@ def añadir_articulo(articulo: str = Form(...), precio: float = Form(...), canti
         
 @router.delete("/delete_item/{id}")
 def delete_item(id: int):
+    delete_item
     cursor = conexion.cursor()
     cursor.execute("DELETE FROM carrito WHERE id = %s", (id,))
     conexion.commit()
