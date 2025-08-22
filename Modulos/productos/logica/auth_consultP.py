@@ -1,16 +1,9 @@
 from Modulos.db import conexion
 
-def create_product(name: str, description: str, cant: int, price: float):
-    cursor = conexion.cursor()
-    query = "INSERT INTO productos (Product_name, Product_description, Product_cant, Product_price) VALUES (%s, %s, %s, %s)"
-    cursor.execute(query, (name, description, cant, price))
-    conexion.commit()
-    cursor.close()
-    return True
 
 def view_product(id: int):
     cursor = conexion.cursor()
-    query = "SELECT * FROM producto WHERE Product_id = %s"
+    query = "SELECT * FROM productos WHERE Product_id = %s"
     cursor.execute(query, (id,))
     product = cursor.fetchone()
     cursor.close()
@@ -18,7 +11,13 @@ def view_product(id: int):
 
 def all_products():
     cursor = conexion.cursor()
-    query = "SELECT * FROM producto"
+    query = """
+        SELECT p.Product_id, p.Product_name, p.Product_description, 
+               p.Product_cant, p.Product_price, c.Cat_name
+        FROM productos p
+        INNER JOIN categorias c ON p.Cat_id = c.Cat_id
+        ORDER BY p.Product_name
+    """
     cursor.execute(query)
     products = cursor.fetchall()
     cursor.close()
@@ -26,7 +25,7 @@ def all_products():
 
 def update_product(id: int, name: str, description: str, cant: int, price: float):
     cursor = conexion.cursor()
-    query = "UPDATE producto SET Product_name = %s, Product_description = %s, Product_cant = %s, Product_price = %s WHERE Product_id = %s"
+    query = "UPDATE productos SET Product_name = %s, Product_description = %s, Product_cant = %s, Product_price = %s WHERE Product_id = %s"
     cursor.execute(query, (name, description, cant, price, id))
     conexion.commit()
     cursor.close()
@@ -34,8 +33,33 @@ def update_product(id: int, name: str, description: str, cant: int, price: float
 
 def delete_product(id: int):
     cursor = conexion.cursor()
-    query = "DELETE FROM producto WHERE Product_id = %s"
+    query = "DELETE FROM productos WHERE Product_id = %s"
     cursor.execute(query, (id,))
     conexion.commit()
     cursor.close()
     return True
+
+def get_category():
+    cursor = conexion.cursor()
+    query = "SELECT * FROM categorias"
+    cursor.execute(query)
+
+
+def all_categories():
+    cursor = conexion.cursor()
+    cursor.execute("SELECT Cat_id, Cat_name FROM categorias")
+    categorias = cursor.fetchall()
+    cursor.close()
+    return categorias
+
+def create_product(name, description, cant, price, category_id):
+    cursor = conexion.cursor()
+    query = """
+        INSERT INTO productos (Product_name, Product_description, Product_cant, Product_price, Cat_id)
+        VALUES (%s, %s, %s, %s, %s)
+    """
+    cursor.execute(query, (name, description, cant, price, category_id))
+    conexion.commit()
+    cursor.close()
+    return True
+
