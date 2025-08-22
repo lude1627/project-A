@@ -12,15 +12,17 @@ def get_items():
     cursor = conexion.cursor()
     query = "SELECT * FROM carrito"
     cursor.execute(query)
-    compras = cursor.fetchall()
+    carrito = cursor.fetchall()
     cursor.close()
-    return compras
+    return carrito
 
 def delete_item(item_id: int):
     cursor = conexion.cursor()
-    cursor.execute("DELETE FROM carrito WHERE id = ?", (item_id,))
+    query = "DELETE FROM carrito WHERE id = %s"
+    cursor.execute (query, (id))
     conexion.commit()
     cursor.close()
+    return True
 
 def get_total():
     cursor = conexion.cursor()

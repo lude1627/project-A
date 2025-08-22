@@ -9,14 +9,17 @@
             border-collapse: collapse;
             margin-top: 20px;
         }
+
         th, td {
             border: 1px solid #999;
             padding: 8px;
             text-align: center;
         }
+
         th {
             background-color: #eee;
         }
+
         #total {
             margin-top: 15px;
             font-weight: bold;
@@ -25,22 +28,51 @@
     </style>
 </head>
 <body>
-    <h2>Carrito de Compras</h2>
+    <form action="/cart" method="post">
+        <h2>Carrito de Compras</h2>
+        <table border="1" style="width:50%; text-align:center;">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Articulo</th>
+                    <th>Precio</th>
+                    <th>Cantidad</th>
+                    <th>Acción</th>
+                </tr>
+            </thead>
+            <tbody id="tabla-carrito"> 
+                <!-- Aquí se insertan los datos -->
+            </tbody>
+        </table>
 
-    <table id="tabla-carrito">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Artículo</th>
-                <th>Precio</th>
-                <th>Cantidad</th>
-            </tr>
-        </thead>
-        <tbody>
-            <td>
-                
-            </td>
-        </tbody>
-    </table>
+    </form>
+
+    <script>
+        fetch("/cart/list")  // Llamada al endpoint JSON
+            .then(response => response.json())
+            .then(data => {
+                const tbody = document.getElementById("tabla-carrito");
+
+                data.items.forEach(carrito => {
+                    const row = `<tr>
+                                    <td>${carrito.id}</td>
+                                    <td>${carrito.articulo}</td>
+                                    <td>${carrito.precio}</td>
+                                    <td>${carrito.cantidad}</td>
+                                    <td>
+                                        <input type="button" value="Editar" onclick="editarItem(${carrito.id})">
+                                        <input type="button" value="Eliminar" onclick="eliminarItem(${carrito.id})">
+                                    </td>
+                                </tr>`;
+                    tbody.innerHTML += row;
+                });
+
+            })
+            .catch(error => console.error("Error:", error));
+
+    </script>
+
+    <br><br>
+    <input type="button" value="Cerrar sesión" onclick="location.href='/'">
 </body>
 </html>
