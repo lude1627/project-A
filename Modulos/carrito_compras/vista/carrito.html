@@ -1,46 +1,178 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <title>Carrito de Compras</title>
-    <style>
+     <style> 
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        h2 {
+            margin-bottom: 15px;
+        }
+
         table {
             width: 50%;
             border-collapse: collapse;
             margin-top: 20px;
         }
-        th, td {
+
+        th,
+        td {
             border: 1px solid #999;
             padding: 8px;
             text-align: center;
         }
+
         th {
             background-color: #eee;
         }
+
         #total {
             margin-top: 15px;
             font-weight: bold;
             font-size: 18px;
         }
-    </style>
-</head>
-<body>
-    <h2>Carrito de Compras</h2>
 
-    <table id="tabla-carrito">
+        .btn {
+            padding: 5px 10px;
+            margin: 2px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .btn-comprar {
+            background-color: #28a745;
+            color: #fff;
+        }
+
+        .btn-editar {
+            background-color: #ffc107;
+            color: #000;
+        }
+
+        .btn-eliminar {
+            background-color: #dc3545;
+            color: #fff;
+        }
+
+        .btn-salir {
+            background-color: #007bff;
+            color: #fff;
+            margin-top: 20px;
+        }
+    </style> 
+</head>
+
+<body onload="carrito()">
+    <form action="/cart/list/data" method="post">
+        <h2>Carrito de Compras</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Artículo</th>
+                    <th>Precio</th>
+                    <th>Cantidad</th>
+                    <th>Acción</th>
+                </tr>
+            </thead>
+            <tbody id="tabla-carrito">
+                <!-- Aquí se insertan los datos -->
+            </tbody>
+        </table>
+
+        <div id="total"></div>
+        
+    </form>
+
+    <script>
+        // Cargar productos
+        async function carrito() {
+            try {
+                const response = await fetch("/cart/list/data");
+                const pro_cart = await response.json();
+
+                let rows = "";
+                let total = 0;
+
+                pro_cart.forEach(c => {
+                    const precio = parseFloat(c.precio) || 0;
+                    const subtotal = precio * c.cantidad;
+                    total += subtotal;
+
+                    rows += `
+                        <tr>
+                            <td>${c.id}</td>
+                            <td>${c.articulo}</td>
+                            <td>$${precio.toFixed(0)}</td>
+                            <td>${c.cantidad}</td>
+                            <td>
+                                <button type="button" class="btn btn-eliminar" onclick="eliminarProducto(${c.id})">Eliminar</button>
+                            </td>
+                        </tr>
+                    `;
+                });
+
+                document.getElementById("tabla-carrito").innerHTML = rows;
+                document.getElementById("total").innerText = "Total: $" + total.toFixed(0);
+
+            } catch (err) {
+                console.error("Error al cargar los datos", err);
+            }
+        }
+    </script>
+
+    <script>
+    function eliminarProducto(id) {
+        if (confirm("¿Seguro que deseas eliminar este producto?")) {
+            fetch(`delete_item/${id}`, {   // <-- aquí el slash es clave
+                method: "DELETE"
+            })
+            .then(res => {
+                if (res.ok) {
+                    alert("Producto eliminado correctamente");
+                    location.reload(); // Recargar la página o actualizar la tabla
+                } else {
+                    alert("Error al eliminar el producto");
+                }
+            })
+            .catch(err => console.error("Error:", err));
+        }
+    }
+</script>
+
+
+
+
+<!-- Botón Comprar Todo -->
+<button type="button" class="btn btn-comprar" onclick="comprarTodo()">Comprar Todo</button>
+
+<!-- Aquí mostramos la factura (puede ser un modal o un div oculto) -->
+<div id="factura" style="display:none; border:1px solid #ccc; padding:15px; margin-top:15px;">
+    <h2>Factura Electrónica</h2>
+    <table border="1" style="width:100%; text-align:center;">
         <thead>
             <tr>
-                <th>ID</th>
-                <th>Artículo</th>
-                <th>Precio</th>
+                <th>Producto</th>
                 <th>Cantidad</th>
+                <th>Precio Unitario</th>
+                <th>Subtotal</th>
             </tr>
         </thead>
-        <tbody>
-            <td>
-                
-            </td>
-        </tbody>
+        <tbody id="detalle-factura"></tbody>
     </table>
+    <h3 id="total"></h3>
+</div>
+
+<br>
+<br>
+
+<button type="button" class="btn btn-salir" onclick="location.href='/'">Cerrar sesión</button>
+
 </body>
 </html>

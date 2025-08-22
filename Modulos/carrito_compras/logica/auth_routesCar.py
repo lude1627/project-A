@@ -1,25 +1,54 @@
 from fastapi import APIRouter, Form
 from fastapi.responses import HTMLResponse, RedirectResponse, JSONResponse
-from fastapi.templating import Jinja2Templates
-from Modulos.carrito_compras.logica.auth_consultasCar import add_item, get_items, delete_item, get_total
+from Modulos.carrito_compras.logica.auth_consultasCar import add_item, get_items, delete_item, get_total, conexion
 
 router = APIRouter()
 
-# Endpoint JSON con lista del carrito
-@router.get("/cart/list", response_class=JSONResponse)
-def lista_carrito():
-    items = get_items()
-    total = get_total()
-    return JSONResponse(content={"Info": f"✅  {items}"})
 
-@router.post("/cart/add")
+def fetch_items_from_db():
+    cursor = conexion.cursor(dictionary=True)
+    cursor.execute("SELECT * FROM carrito")
+    items = cursor.fetchall()
+    cursor.close()
+    return items
+
+@router.get("/cart/list/data")
+def get_items():
+    carrito = fetch_items_from_db()
+    return carrito
+
+@router.get("/cart", response_class=HTMLResponse)
+def cart():
+    with open("Modulos/carrito_compras/vista/carrito.html", "r", encoding="utf-8") as f:
+        return HTMLResponse(content=f.read())
+    
+@router.get("/cart/list/data")
+def get_items():
+    carrito = get_items()
+    carritos_json = [
+        {
+            "id": c[0],
+            "articulo": c[1],
+            "precio": c[2],
+            "cantidad": c[3],          
+        }
+        for c in carrito
+    ]
+    return JSONResponse(content=carritos_json)
+
+@router.post("/cart/add", response_class=HTMLResponse)
 def añadir_articulo(articulo: str = Form(...), precio: float = Form(...), cantidad: int = Form(...)):
-    add_item(articulo, precio, cantidad)
-    #return RedirectResponse(url="/cart", status_code=303)
-    return JSONResponse(content={"message": f"✅ Artículo  {articulo} agregado correctamente"})
+    if add_item(articulo, precio, cantidad):
+        return HTMLResponse(content="<script>alert(Articulo agregado)</script>")
+    else:
+        return HTMLResponse(content="<script>alert(Error al agregar)</script>")
+        
+@router.delete("/delete_item/{id}")
+def delete_item(id: int):
+    cursor = conexion.cursor()
+    cursor.execute("DELETE FROM carrito WHERE id = %s", (id,))
+    conexion.commit()
+    cursor.close()
+    return {"message": "Producto eliminado"}
 
-@router.get("/cart/delete/{item_id}")
-def eliminar_articulo(item_id: int):
-    delete_item(item_id)  # Aquí borras el item
-    return JSONResponse(content={"message": f"✅ Artículo con ID {item_id} eliminado correctamente"})
 
