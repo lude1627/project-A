@@ -22,7 +22,7 @@ def delete_item(item_id: int):
     cursor.execute (query, (id))
     conexion.commit()
     cursor.close()
-    return True
+    return {"mensaje": "Producto eliminado"}
 
 def get_total():
     cursor = conexion.cursor()
@@ -32,3 +32,5 @@ def get_total():
     if row and row[0] is not None:
         return row[0]
     return 0
+
+

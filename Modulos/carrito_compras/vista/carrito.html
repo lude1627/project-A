@@ -1,16 +1,27 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <title>Carrito de Compras</title>
-    <style>
+     <style> 
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        h2 {
+            margin-bottom: 15px;
+        }
+
         table {
             width: 50%;
             border-collapse: collapse;
             margin-top: 20px;
         }
 
-        th, td {
+        th,
+        td {
             border: 1px solid #999;
             padding: 8px;
             text-align: center;
@@ -25,54 +36,143 @@
             font-weight: bold;
             font-size: 18px;
         }
-    </style>
+
+        .btn {
+            padding: 5px 10px;
+            margin: 2px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .btn-comprar {
+            background-color: #28a745;
+            color: #fff;
+        }
+
+        .btn-editar {
+            background-color: #ffc107;
+            color: #000;
+        }
+
+        .btn-eliminar {
+            background-color: #dc3545;
+            color: #fff;
+        }
+
+        .btn-salir {
+            background-color: #007bff;
+            color: #fff;
+            margin-top: 20px;
+        }
+    </style> 
 </head>
-<body>
-    <form action="/cart" method="post">
+
+<body onload="carrito()">
+    <form action="/cart/list/data" method="post">
         <h2>Carrito de Compras</h2>
-        <table border="1" style="width:50%; text-align:center;">
+        <table>
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th>Articulo</th>
+                    <th>Artículo</th>
                     <th>Precio</th>
                     <th>Cantidad</th>
                     <th>Acción</th>
                 </tr>
             </thead>
-            <tbody id="tabla-carrito"> 
+            <tbody id="tabla-carrito">
                 <!-- Aquí se insertan los datos -->
             </tbody>
         </table>
 
+        <div id="total"></div>
+        
     </form>
 
     <script>
-        fetch("/cart/list")  // Llamada al endpoint JSON
-            .then(response => response.json())
-            .then(data => {
-                const tbody = document.getElementById("tabla-carrito");
+        // Cargar productos
+        async function carrito() {
+            try {
+                const response = await fetch("/cart/list/data");
+                const pro_cart = await response.json();
 
-                data.items.forEach(carrito => {
-                    const row = `<tr>
-                                    <td>${carrito.id}</td>
-                                    <td>${carrito.articulo}</td>
-                                    <td>${carrito.precio}</td>
-                                    <td>${carrito.cantidad}</td>
-                                    <td>
-                                        <input type="button" value="Editar" onclick="editarItem(${carrito.id})">
-                                        <input type="button" value="Eliminar" onclick="eliminarItem(${carrito.id})">
-                                    </td>
-                                </tr>`;
-                    tbody.innerHTML += row;
+                let rows = "";
+                let total = 0;
+
+                pro_cart.forEach(c => {
+                    const precio = parseFloat(c.precio) || 0;
+                    const subtotal = precio * c.cantidad;
+                    total += subtotal;
+
+                    rows += `
+                        <tr>
+                            <td>${c.id}</td>
+                            <td>${c.articulo}</td>
+                            <td>$${precio.toFixed(0)}</td>
+                            <td>${c.cantidad}</td>
+                            <td>
+                                <button type="button" class="btn btn-eliminar" onclick="eliminarProducto(${c.id})">Eliminar</button>
+                            </td>
+                        </tr>
+                    `;
                 });
 
-            })
-            .catch(error => console.error("Error:", error));
+                document.getElementById("tabla-carrito").innerHTML = rows;
+                document.getElementById("total").innerText = "Total: $" + total.toFixed(0);
 
+            } catch (err) {
+                console.error("Error al cargar los datos", err);
+            }
+        }
     </script>
 
-    <br><br>
-    <input type="button" value="Cerrar sesión" onclick="location.href='/'">
+    <script>
+    function eliminarProducto(id) {
+        if (confirm("¿Seguro que deseas eliminar este producto?")) {
+            fetch(`delete_item/${id}`, {   // <-- aquí el slash es clave
+                method: "DELETE"
+            })
+            .then(res => {
+                if (res.ok) {
+                    alert("Producto eliminado correctamente");
+                    location.reload(); // Recargar la página o actualizar la tabla
+                } else {
+                    alert("Error al eliminar el producto");
+                }
+            })
+            .catch(err => console.error("Error:", err));
+        }
+    }
+</script>
+
+
+
+
+<!-- Botón Comprar Todo -->
+<button type="button" class="btn btn-comprar" onclick="comprarTodo()">Comprar Todo</button>
+
+<!-- Aquí mostramos la factura (puede ser un modal o un div oculto) -->
+<div id="factura" style="display:none; border:1px solid #ccc; padding:15px; margin-top:15px;">
+    <h2>Factura Electrónica</h2>
+    <table border="1" style="width:100%; text-align:center;">
+        <thead>
+            <tr>
+                <th>Producto</th>
+                <th>Cantidad</th>
+                <th>Precio Unitario</th>
+                <th>Subtotal</th>
+            </tr>
+        </thead>
+        <tbody id="detalle-factura"></tbody>
+    </table>
+    <h3 id="total"></h3>
+</div>
+
+<br>
+<br>
+
+<button type="button" class="btn btn-salir" onclick="location.href='/'">Cerrar sesión</button>
+
 </body>
 </html>
