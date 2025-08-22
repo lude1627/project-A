@@ -8,6 +8,7 @@
 <body>
     <h1>Productos Disponibles</h1>
     <input type="button" value="Agregar Producto" onclick="location.href='/create_product'">
+    <input type="button" value="Categorias" onclick="location.href='/category'">
     <br><br>
 
     <table border="1" style="width: 100%; text-align: center;">
@@ -24,6 +25,8 @@
         </thead>
         <tbody id="user-table"></tbody>
     </table>
+    <br>
+    <br>
 
     <script>
         async function cargarProductos() {
@@ -39,10 +42,10 @@
                             <td>${p.nombre}</td>
                             <td>${p.descripcion}</td>
                             <td>${p.cantidad}</td>
-                            <td>${p.precio}</td>
+                            <td>$${p.precio}</td>
                             <td>${p.categoria}</td>
                             <td>
-                                <button onclick="alert('${p.nombre} apartado')">Comprar</button>
+                                <input type="button" value="Carrito" onclick="location.href='/cart'">
                                 <input type="button" value="Editar" onclick="location.href='/edit_product'">
                                 <button onclick="eliminarProducto(${p.id})">Eliminar</button>
                             </td>

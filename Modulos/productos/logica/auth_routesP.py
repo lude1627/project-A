@@ -48,7 +48,7 @@ def create_product_route(
 
 
 @router.get("/view_product", response_class=HTMLResponse)
-def view_product():
+def view_product_page():
     with open("Modulos/productos/view/view_product.html", "r", encoding="utf-8") as f:
         return HTMLResponse(content=f.read())
 
@@ -106,8 +106,8 @@ def edit_product(
     cant: int = Form(...),
     price: float = Form(...)
 ):
-    success = update_product(id, name, description, category_id, cant, price)
-    if success:
+     
+    if update_product(id, name, description, category_id, cant, price):
         return HTMLResponse(
             content=f"<script>alert('Producto actualizado exitosamente'); window.location.href='/updateP?id={id}';</script>"
         )
