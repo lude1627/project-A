@@ -47,10 +47,6 @@ def create_product_route(
         return HTMLResponse(content="<script>alert('Error al crear el producto');</script>", status_code=500)
 
 
-
-
-
-
 @router.get("/view_product", response_class=HTMLResponse)
 def view_product():
     with open("Modulos/productos/view/view_product.html", "r", encoding="utf-8") as f:
