@@ -21,7 +21,7 @@ while True:
         try:
             precio = float(input("💲 Ingrese el precio: "))
             carrito[articulo] = precio
-            print(f"✅ '{articulo}' se agregó al carrito por ${precio:.2f}")
+            print(f"✅ '{articulo}' se agregó al carrito por ${precio:.0f}")
         except ValueError:
             print("⚠️ El precio debe ser un número.")
 
@@ -29,7 +29,7 @@ while True:
         if carrito:
             print("\n🛍️ Su carrito contiene:")
             for articulo, precio in carrito.items():
-                print(f"   - {articulo}: ${precio:f}")
+                print(f"   - {articulo}: ${precio:.0f}")
         else:
             print("📭 El carrito está vacío.")
 
