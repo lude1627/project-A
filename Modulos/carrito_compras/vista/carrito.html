@@ -128,7 +128,7 @@
 
         function eliminarProducto(id) {
             if (confirm("¿Seguro que deseas eliminar este producto?")) {
-                fetch(`delete_item${id}`, {
+                fetch(`/productos/eliminar/${id}`, {
                     method: "DELETE"
                 })
                     .then(res => {
