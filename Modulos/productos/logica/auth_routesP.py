@@ -31,7 +31,7 @@ def create():
 
 
 @router.post("/create_product", response_class=HTMLResponse)
-def create_product_route(
+def create_product_route( 
     name: str = Form(...),
     description: str = Form(...),
     cant: int = Form(...),
