@@ -1,13 +1,14 @@
-from Modulos.db import conexion
+from Modulos.db import execute_query,conexion
 
 def create_cat(id: int, name: str):
-    cursor = conexion.cursor()
     query = "INSERT INTO categorias (Cat_id, Cat_name) VALUES (%s, %s)"
-    cursor.execute(query, (id, name))
-    conexion.commit()
-    cursor.close()
-    return True
-
+    try:
+        execute_query(query, (id, name),commit=True)
+        return True
+    except Exception as e:
+        print("Error en create_cat: {e}")
+        return False
+    
 def view_cat():
     cursor = conexion.cursor(dictionary=True)
     query = "SELECT * FROM categorias"
@@ -15,11 +16,11 @@ def view_cat():
     categories = cursor.fetchall()
     cursor.close()
     return categories
-
 def delete_cat(id: int):
-    cursor = conexion.cursor()
     query = "DELETE FROM categorias WHERE Cat_id = %s"
-    cursor.execute(query, (id,))
-    conexion.commit()
-    cursor.close()
-    return True
+    try:
+        execute_query(query, (id), commit=True)
+        return True
+    except Exception as e:
+        print("Error en delete_cat: {e}")
+        return False
