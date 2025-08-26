@@ -1,6 +1,7 @@
 from Modulos.db import conexion
 
 def login_user(username: str, password: str):
+    
     cursor = conexion.cursor()
     query = "SELECT * FROM usuario WHERE User_name = %s AND User_password = %s"
     cursor.execute(query, (username, password))
