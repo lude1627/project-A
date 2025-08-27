@@ -4,11 +4,20 @@ from Modulos.categoria.logica.auth_consultC import create_cat,all_categories , d
 
 router = APIRouter()
 
+
+
 @router.get("/category", response_class=HTMLResponse)
 def categories():
     with open("Modulos/categoria/vista/categorias.html", "r", encoding="utf-8") as f:
         return HTMLResponse(content=f.read())
     
+@router.post("/category", response_class=HTMLResponse)
+def create_category(id: int = Form(...), name: str = Form(...)):
+    if create_cat(id, name):
+        return HTMLResponse(content="<script>alert('Categoría creada exitosamente'); window.location.href='/category';</script>")
+    else:
+        return HTMLResponse(content="<script>alert('Error al crear categoría'); window.location.href='/category';</script>")    
+
     
 @router.get("/view_category/data")
 def get_category():
@@ -24,12 +33,6 @@ def get_category():
 
 
     
-@router.post("/categorySave", response_class=HTMLResponse)
-def create_category(id: int = Form(...), name: str = Form(...)):
-    if create_cat(id, name):
-        return HTMLResponse(content="<script>alert('Categoría creada exitosamente'); window.location.href='/category';</script>")
-    else:
-        return HTMLResponse(content="<script>alert('Error al crear categoría'); window.location.href='/category';</script>")    
 
 
 @router.get("/category/delete", response_class=HTMLResponse)
