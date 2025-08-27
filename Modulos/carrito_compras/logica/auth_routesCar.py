@@ -10,15 +10,18 @@ def view_product_page():
         return HTMLResponse(content=f.read())
 
 @router.get("/view_carrito/data")
-def get_carricto():
+def get_carrito():
     carrito = get_items()
+    if not carrito:
+        return []
+
     carrito_json = [
         {
             "Car_id": c[0],
-            "Product_name": c[1],
-            "Car_cantidad": c[3],
-            "Product_price": c[4],
-            "Car_subTotal": c[5],
+            "Car_cantidad": c[1],
+            "Product_name": c[2],
+            "Product_price": c[3],
+            "Car_subTotal": c[4],
         }
         for c in carrito
     ]
