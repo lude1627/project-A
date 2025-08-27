@@ -12,7 +12,7 @@ def add_to_cart(product_id: int, user_id: int, cantidad: int):
     conexion.commit()
     return JSONResponse(content={"message": "Producto agregado al carrito"})
 
-
+#uno mas
 #mostrar datos en tabla
 def get_items():
     query = """ 
