@@ -27,34 +27,70 @@
             <!-- Aquí se insertan los datos -->
 
         </tbody>
-        
+
     </table>
-     
+
 
 
     <script>
-        fetch("List_Category")  // Llamada al endpoint JSON
-            .then(response => response.json())
-            .then(data => {
-                const tbody = document.getElementById("tabla-categorias");
-                data.forEach(cat => {
-                    const row = `<tr>
-                                    <td>${cat.Cat_id}</td>
-                                    <td>${cat.Cat_name}</td>
-                                    <td>
-                                    <input type="button" value="Editar" onclick="location.href='#'">
-                                    <input type="button" value="Eliminar" onclick="location.href='#'">
-                                    </td>
-                                 </tr>`;
-                    tbody.innerHTML += row;
+        async function cargarCategory() {
+            try {
+                const response = await fetch("/view_category/data");
+                const categoria = await response.json();
+
+                let rows = "";
+                categoria.forEach(cat => {
+                    rows += `
+                        <tr>
+                            <td>${cat.Cat_id}</td>
+                            <td>${cat.Cat_name}</td>
+                            <td>
+                                <input type="button" value="Editar" onclick="location.href='#'">
+                                <input type="button" value="Eliminar" onclick="location.href='#'">
+                            </td>
+                         </tr>
+                                 
+                    `;
+
                 });
-            })
-            .catch(error => console.error("Error:", error));
+                document.getElementById("tabla-categorias").innerHTML = rows;
+            } catch (error) {
+                console.error("Error:", error);
+            }
+
+
+        }
+
+        // Función para eliminar un producto
+        async function eliminarProducto(id) {
+            if (confirm("¿Seguro que deseas eliminar este producto del carrito?")) {
+                try {
+                    const res = await fetch(`/cart/${id}`, {
+                        method: "DELETE"
+                    });
+
+                    if (res.ok) {
+                        alert("Producto eliminado");
+                        cargarCarrito(); // recargar productos después de eliminar
+                    } else {
+                        alert("Error al eliminar producto");
+                    }
+                } catch (error) {
+                    console.error("Error eliminando producto:", error);
+                }
+            }
+        }
+
+        window.onload = cargarCategory();  
     </script>
 
     <br>
-       <button onclick="location.href='/view_product'">Volver</button>
     <br>
+    <button onclick="window.history.back()">⬅️ Regresar</button>
+
+    <!-- <br>
+    <button onclick="location.href='/view_product'">Volver</button>
+    <br> -->
 
 
 
