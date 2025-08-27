@@ -3,8 +3,8 @@ from Modulos.db import execute_query
 def create_cat(id: int, name: str):
     query = "INSERT INTO categorias (Cat_id, Cat_name) VALUES (%s, %s)"
     try:
-        categoria = execute_query(query, (id, name),commit=True)
-        return categoria
+        execute_query(query, (id, name), commit=True)
+        return {"Cat_id": id, "Cat_name": name}
     except Exception as e:
         print("Error al crear una categoria: {e}")
         return False
