@@ -1,4 +1,4 @@
-from Modulos.db import execute_query, conexion
+from Modulos.db import execute_query
 
 
 def view_product(id: int):
