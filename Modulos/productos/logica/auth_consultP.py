@@ -1,6 +1,20 @@
 from Modulos.db import execute_query
 
+def add_to_cart(product_id: int, user_id: int, cantidad: int):
+    query = """
+        INSERT INTO carrito (User_id, Product_id, Car_Cantidad)
+        VALUES (%s, %s, %s)
+        ON DUPLICATE KEY UPDATE Car_Cantidad = Car_Cantidad + VALUES(Car_Cantidad);
+    """
+    try:
 
+     carrito = execute_query(query, (user_id, product_id, cantidad), fetchall=True)
+   
+     return carrito
+    except Exception as e:
+         print("Error al guardar las compras: {e}")
+         return False 
+         
 def view_product(id: int):
     query = " SELECT Product_id, Product_name, Product_description,  Product_cant, Product_price, Cat_id FROM productos WHERE Product_id = %s "
     try:
