@@ -7,7 +7,7 @@ def view_product(id: int):
         product = execute_query(query,(id),fechnone=True)
         return product
     except Exception as e:
-        print(f"Error en view_product: {e}")
+        print(f"Error al mostrar Producto: {e}")
 
 
 
@@ -19,7 +19,7 @@ def all_products():
         products = execute_query(query,fetchall=True)
         return products
     except Exception as e:
-        print("Erro en all_product: {e}")
+        print("Error al mostrar productos: {e}")
         return None
 
 
@@ -30,7 +30,7 @@ def update_product(id: int, name: str, description: str, cant: int, price: float
         execute_query(query,(id,name,description,cant,price,cat_id),commit=True)
         return True
     except Exception as e:
-        print("Error en update_product: {e}")
+        print("Error al actualizar producto: {e}")
         return False
 
 
@@ -43,7 +43,7 @@ def delete_product(id: int):
         execute_query(query,(id),commit=True)
         return True
     except Exception as e:
-        print("Error en delete_product: {e}")
+        print("Error al eliminar el producto: {e}")
         return 
     
 
@@ -55,7 +55,7 @@ def get_category():
         execute_query(query,(id),commit=True)
         return True
     except Exception as e:
-        print("Error en get_category: {e}")
+        print("Error al traer las categorias: {e}")
         return False
 
 
@@ -68,7 +68,7 @@ def all_categories():
         return categorias
     except Exception as e:
 
-        print("Error en all_category: {e}")
+        print("Error al mostrar las categorias : {e}")
 
 
 
@@ -79,5 +79,5 @@ def create_product(name, description, cant, price, category_id):
         execute_query(query, (name, description, cant, price, category_id), commit=True)
         return True
     except Exception as e:
-        print("Error en create_product: {e}")
+        print("Error al crear un producto: {e}")
         return False

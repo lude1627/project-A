@@ -11,15 +11,15 @@ def create():
     with open("Modulos/productos/view/create_product.html", "r", encoding="utf-8") as f:
         html = f.read()
 
-    # obtener categorías desde BD
+  
     categorias = all_categories()
 
-    # construir las opciones <option>
+   
     options = '<option value="">Seleccione una categoria</option>'
     for c in categorias:
         options += f'<option value="{c[0]}">{c[1]}</option>'
 
-    # reemplazar dentro del <select>
+    
     html = html.replace(
         '<option value="">Seleccione una categoria</option>',
         options
