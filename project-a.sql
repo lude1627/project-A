@@ -1,195 +1,140 @@
-<<<<<<< HEAD:project-a .sql
--- Base de datos: project-a
--- Limpieza inicial (seguridad: elimina tablas si ya existen)
-DROP TABLE IF EXISTS `carrito`;
-DROP TABLE IF EXISTS `productos`;
-DROP TABLE IF EXISTS `categorias`;
-DROP TABLE IF EXISTS `usuario`;
-
--- --------------------------------------------------------
--- Tabla: categorias
--- --------------------------------------------------------
-CREATE TABLE `categorias` (
-  `Cat_id` INT(11) NOT NULL AUTO_INCREMENT,
-  `Cat_name` VARCHAR(100) NOT NULL,
-  PRIMARY KEY (`Cat_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-=======
--- phpMyAdmin SQL Dump
--- version 5.2.1
--- https://www.phpmyadmin.net/
+-- MySQL dump 10.13  Distrib 8.0.43, for Win64 (x86_64)
 --
--- Servidor: 127.0.0.1
--- Tiempo de generación: 25-08-2025 a las 15:17:59
--- Versión del servidor: 10.4.32-MariaDB
--- Versión de PHP: 8.0.30
-
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-START TRANSACTION;
-SET time_zone = "+00:00";
-
+-- Host: 127.0.0.1    Database: project-a
+-- ------------------------------------------------------
+-- Server version	5.5.5-10.4.22-MariaDB
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
+/*!50503 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Base de datos: `project-a`
+-- Table structure for table `carrito`
 --
 
--- --------------------------------------------------------
+DROP TABLE IF EXISTS `carrito`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `carrito` (
+  `Car_id` int(11) NOT NULL AUTO_INCREMENT,
+  `User_id` int(11) NOT NULL,
+  `Product_id` int(11) NOT NULL,
+  `Car_Cantidad` int(11) NOT NULL DEFAULT 1,
+  `Car_subTotal` float NOT NULL,
+  PRIMARY KEY (`Car_id`),
+  KEY `fk_carrito_usuario` (`User_id`),
+  KEY `fk_carrito_producto` (`Product_id`),
+  CONSTRAINT `fk_carrito_producto` FOREIGN KEY (`Product_id`) REFERENCES `productos` (`Product_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_carrito_usuario` FOREIGN KEY (`User_id`) REFERENCES `usuario` (`User_id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Estructura de tabla para la tabla `categorias`
+-- Dumping data for table `carrito`
 --
 
+LOCK TABLES `carrito` WRITE;
+/*!40000 ALTER TABLE `carrito` DISABLE KEYS */;
+INSERT INTO `carrito` VALUES (1,1,13,2,10000);
+/*!40000 ALTER TABLE `carrito` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `categorias`
+--
+
+DROP TABLE IF EXISTS `categorias`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `categorias` (
-  `Cat_id` int(11) NOT NULL,
-  `Cat_name` varchar(45) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+  `Cat_id` int(11) NOT NULL AUTO_INCREMENT,
+  `Cat_name` varchar(100) NOT NULL,
+  PRIMARY KEY (`Cat_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Volcado de datos para la tabla `categorias`
+-- Dumping data for table `categorias`
 --
->>>>>>> d2a49498c6f85a53a24e1bc92c86479066f371a7:project-a.sql
 
-INSERT INTO `categorias` (`Cat_id`, `Cat_name`) VALUES
-(1, 'Comida'),
-(2, 'Aseo'),
-(3, 'Utensilios de cocina');
+LOCK TABLES `categorias` WRITE;
+/*!40000 ALTER TABLE `categorias` DISABLE KEYS */;
+INSERT INTO `categorias` VALUES (1,'Comida'),(2,'Aseo'),(3,'Utensilios de cocina');
+/*!40000 ALTER TABLE `categorias` ENABLE KEYS */;
+UNLOCK TABLES;
 
--- --------------------------------------------------------
--- Tabla: productos
--- --------------------------------------------------------
+--
+-- Table structure for table `productos`
+--
+
+DROP TABLE IF EXISTS `productos`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `productos` (
-<<<<<<< HEAD:project-a .sql
-  `Product_id` INT(11) NOT NULL AUTO_INCREMENT,
-  `Product_name` VARCHAR(100) NOT NULL,
-  `Product_description` VARCHAR(255) NOT NULL,
-  `Cat_id` INT(11) NOT NULL,
-  `Product_cant` INT(11) NOT NULL DEFAULT 0,
-  `Product_price` DECIMAL(10,2) NOT NULL,
+  `Product_id` int(11) NOT NULL AUTO_INCREMENT,
+  `Product_name` varchar(100) NOT NULL,
+  `Product_description` varchar(255) NOT NULL,
+  `Cat_id` int(11) NOT NULL,
+  `Product_cant` int(11) NOT NULL DEFAULT 0,
+  `Product_price` float NOT NULL,
   PRIMARY KEY (`Product_id`),
   KEY `fk_productos_categoria` (`Cat_id`),
   CONSTRAINT `fk_productos_categoria` FOREIGN KEY (`Cat_id`) REFERENCES `categorias` (`Cat_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
-INSERT INTO `productos` (`Product_id`, `Product_name`, `Product_description`, `Cat_id`, `Product_cant`, `Product_price`) VALUES
-(13, 'Sachipapa', 'Comida rápida', 1, 27, 10000.00);
-=======
-  `Product_id` int(11) NOT NULL,
-  `Product_name` varchar(60) NOT NULL,
-  `Product_description` varchar(100) NOT NULL,
-  `Cat_id` int(11) NOT NULL,
-  `Product_cant` int(11) NOT NULL,
-  `Product_price` float NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Volcado de datos para la tabla `productos`
+-- Dumping data for table `productos`
 --
 
-INSERT INTO `productos` (`Product_id`, `Product_name`, `Product_description`, `Cat_id`, `Product_cant`, `Product_price`) VALUES
-(13, 'Sachipapa', 'comida rapida', 1, 27, 10000);
->>>>>>> d2a49498c6f85a53a24e1bc92c86479066f371a7:project-a.sql
+LOCK TABLES `productos` WRITE;
+/*!40000 ALTER TABLE `productos` DISABLE KEYS */;
+INSERT INTO `productos` VALUES (13,'Sachipapa','Comida rápida',1,27,10000);
+/*!40000 ALTER TABLE `productos` ENABLE KEYS */;
+UNLOCK TABLES;
 
--- --------------------------------------------------------
--- Tabla: usuario
--- --------------------------------------------------------
+--
+-- Table structure for table `usuario`
+--
+
+DROP TABLE IF EXISTS `usuario`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `usuario` (
-<<<<<<< HEAD:project-a .sql
-  `User_id` INT(11) NOT NULL AUTO_INCREMENT,
-  `User_name` VARCHAR(100) NOT NULL,
-  `User_phone` VARCHAR(15) NOT NULL,
-  `User_mail` VARCHAR(100) NOT NULL UNIQUE,
-  `User_password` VARCHAR(255) NOT NULL COMMENT 'Contraseña en hash (bcrypt/argon2)',
-  PRIMARY KEY (`User_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='Tabla de usuarios';
-=======
-  `User_id` int(15) NOT NULL,
+  `User_id` int(11) NOT NULL AUTO_INCREMENT,
   `User_name` varchar(100) NOT NULL,
-  `User_phone` int(15) NOT NULL,
-  `User_mail` varchar(60) NOT NULL,
-  `User_password` int(15) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci COMMENT='tabla registro de usuario';
->>>>>>> d2a49498c6f85a53a24e1bc92c86479066f371a7:project-a.sql
-
-INSERT INTO `usuario` (`User_name`, `User_phone`, `User_mail`, `User_password`) VALUES
-('luis felipe', '302401912', 'lfdelahozfontalvo@gmail.com', 'hashed_password_aqui');
-
-<<<<<<< HEAD:project-a .sql
--- --------------------------------------------------------
--- Tabla: carrito
--- --------------------------------------------------------
-CREATE TABLE `carrito` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT,
-  `User_id` INT(11) NOT NULL,
-  `Product_id` INT(11) NOT NULL,
-  `cantidad` INT(11) NOT NULL DEFAULT 1,
-  `precio_unitario` DECIMAL(10,2) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `fk_carrito_usuario` (`User_id`),
-  KEY `fk_carrito_producto` (`Product_id`),
-  CONSTRAINT `fk_carrito_usuario` FOREIGN KEY (`User_id`) REFERENCES `usuario` (`User_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk_carrito_producto` FOREIGN KEY (`Product_id`) REFERENCES `productos` (`Product_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-=======
-INSERT INTO `usuario` (`User_id`, `User_name`, `User_phone`, `User_mail`, `User_password`) VALUES
-(103429967, 'luis felipe', 302401912, 'lfdelahozfontalvo@gmail.com', 1627);
+  `User_phone` varchar(15) NOT NULL,
+  `User_mail` varchar(100) NOT NULL,
+  `User_password` varchar(255) NOT NULL COMMENT 'Contraseña en hash (bcrypt/argon2)',
+  PRIMARY KEY (`User_id`),
+  UNIQUE KEY `User_mail` (`User_mail`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COMMENT='Tabla de usuarios';
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Índices para tablas volcadas
+-- Dumping data for table `usuario`
 --
 
---
--- Indices de la tabla `categorias`
---
-ALTER TABLE `categorias`
-  ADD PRIMARY KEY (`Cat_id`);
+LOCK TABLES `usuario` WRITE;
+/*!40000 ALTER TABLE `usuario` DISABLE KEYS */;
+INSERT INTO `usuario` VALUES (1,'luis felipe','302401912','lfdelahozfontalvo@gmail.com','hashed_password_aqui'),(2,'Raul Osorio','3023023023','rosoriocastro2002@gmail.com','123456');
+/*!40000 ALTER TABLE `usuario` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
---
--- Indices de la tabla `productos`
---
-ALTER TABLE `productos`
-  ADD PRIMARY KEY (`Product_id`),
-  ADD KEY `fk_productos_categoria` (`Cat_id`);
-
---
--- Indices de la tabla `usuario`
---
-ALTER TABLE `usuario`
-  ADD PRIMARY KEY (`User_id`),
-  ADD UNIQUE KEY `User_id_UNIQUE` (`User_id`);
-
---
--- AUTO_INCREMENT de las tablas volcadas
---
-
---
--- AUTO_INCREMENT de la tabla `categorias`
---
-ALTER TABLE `categorias`
-  MODIFY `Cat_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
-
---
--- AUTO_INCREMENT de la tabla `productos`
---
-ALTER TABLE `productos`
-  MODIFY `Product_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
-
---
--- Restricciones para tablas volcadas
---
-
---
--- Filtros para la tabla `productos`
---
-ALTER TABLE `productos`
-  ADD CONSTRAINT `fk_productos_categoria` FOREIGN KEY (`Cat_id`) REFERENCES `categorias` (`Cat_id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
-COMMIT;
-
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
->>>>>>> d2a49498c6f85a53a24e1bc92c86479066f371a7:project-a.sql
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2025-08-27  9:22:15
