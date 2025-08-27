@@ -31,6 +31,7 @@ def create_category(id: int = Form(...), name: str = Form(...)):
     else:
         return HTMLResponse(content="<script>alert('Error al crear categoría'); window.location.href='/category';</script>")    
 
+
 @router.get("/category/delete", response_class=HTMLResponse)
 def delete_category(id: int):
     if delete_cat(id):
