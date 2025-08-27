@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Form, HTTPException
+from fastapi import APIRouter, Form
 from fastapi.responses import HTMLResponse, JSONResponse
 from Modulos.carrito_compras.logica.auth_consultasCar import get_items
 
@@ -8,11 +8,6 @@ router = APIRouter()
 def view_product_page():
     with open("Modulos/carrito_compras/vista/carrito.html", "r", encoding="utf-8") as f:
         return HTMLResponse(content=f.read())
-    
-#agregar product al car
-@router.post("/add_to_cart")
-
-
 
 @router.get("/view_carrito/data")
 def get_carricto():
