@@ -15,8 +15,7 @@ def get_carricto():
     carrito_json = [
         {
             "Car_id": c[0],
-            "Product_id": c[1],
-            "Product_name": c[2],
+            "Product_name": c[1],
             "Car_cantidad": c[3],
             "Product_price": c[4],
             "Car_subTotal": c[5],
