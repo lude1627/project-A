@@ -3,22 +3,22 @@ from Modulos.db import conexion
 
 def get_items():
     cursor = conexion.cursor()
-    query = "SELECT * FROM carrito"
+    query = """ 
+        SELECT 
+            c.Car_id,
+            u.User_id,
+            u.User_name,
+            p.Product_id,
+            p.Product_name,
+            c.Car_Cantidad,
+            p.Product_price AS precio,
+            (c.Car_Cantidad * p.Product_price) AS subtotal
+        FROM carrito c
+        JOIN productos p ON c.Product_id = p.Product_id
+        JOIN usuario u ON c.User_id = u.User_id;
+        """
     cursor.execute(query)
     carrito = cursor.fetchall()
     cursor.close()
-    return True
-
-def eliminar_producto_db(id: int) -> bool:
-    try:
-        cursor = conexion.cursor()
-        query = "DELETE FROM productos WHERE id = %s" 
-        cursor.execute
-        conexion.commit()
-        eliminado = cursor.rowcount > 0  
-        conexion.close()
-        return eliminado
-    except Exception as e:
-        print("Error al eliminar:", e)
-        return False
+    return carrito
 
