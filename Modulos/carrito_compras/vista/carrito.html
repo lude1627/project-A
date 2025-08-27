@@ -1,13 +1,30 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <title>Carrito de Compras</title>
     <style>
-        table { border-collapse: collapse; width: 80%; margin: auto; }
-        th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }
-        th { background: #f2f2f2; }
-        tfoot td { font-weight: bold; }
+        table {
+            border-collapse: collapse;
+            width: 80%;
+            margin: auto;
+        }
+
+        th,
+        td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: center;
+        }
+
+        th {
+            background: #f2f2f2;
+        }
+
+        tfoot td {
+            font-weight: bold;
+        }
     </style>
 </head>
 
@@ -31,62 +48,63 @@
     <h3>Total: $<span id="total">0</span></h3>
 
     <script>
-    // Función para cargar los productos del carrito
-    async function cargarCarrito() {
-        try {
-            const response = await fetch("/view_carrito/data"); // endpoint de tu API
-            const carrito = await response.json();
+        // Función para cargar los productos del carrito
+        async function cargarCarrito() {
+            try {
+                const response = await fetch("/view_carrito/data"); // endpoint de tu API
+                const carrito = await response.json();
 
-            let rows = "";
-            carrito.forEach(c => {
-                rows += `
+                let rows = "";
+                carrito.forEach(c => {
+                    rows += `
                     <tr>
                         <td>${c.Car_id}</td>
                         <td>${c.Product_name}</td>
-                        <td>${c.Car_cantidad}</td>
+                        <td>${c.Car_cantidad} UND</td>
                         <td>$${c.Product_price}</td>
-                        <td>${c.Car_subTotal}</td>
+                        <td>$${c.Car_subTotal}</td>
                         <td>
                             <button class="btn btn-danger" onclick="eliminarProducto(${c.Car_id})">Eliminar</button>
                         </td>
                     </tr>
                 `;
-            });
-
-            // Pintar las filas en el tbody de la tabla
-            document.getElementById("carrito-body").innerHTML = rows;
-
-        } catch (error) {
-            console.error("Error cargando productos:", error);
-        }
-    }
-
-    // Función para eliminar un producto
-    async function eliminarProducto(id) {
-        if (confirm("¿Seguro que deseas eliminar este producto del carrito?")) {
-            try {
-                const res = await fetch(`/cart/${id}`, {
-                    method: "DELETE"
                 });
 
-                if (res.ok) {
-                    alert("Producto eliminado");
-                    cargarCarrito(); // recargar productos después de eliminar
-                } else {
-                    alert("Error al eliminar producto");
-                }
+                // Pintar las filas en el tbody de la tabla
+                document.getElementById("carrito-body").innerHTML = rows;
+
             } catch (error) {
-                console.error("Error eliminando producto:", error);
+                console.error("Error cargando productos:", error);
             }
         }
-    }
 
-    // Cuando cargue la página, que se carguen los productos
-    window.onload = cargarCarrito;
-</script>
+        // Función para eliminar un producto
+        async function eliminarProducto(id) {
+            if (confirm("¿Seguro que deseas eliminar este producto del carrito?")) {
+                try {
+                    const res = await fetch(`/cart/${id}`, {
+                        method: "DELETE"
+                    });
 
-<button onclick="window.history.back()">⬅️ Regresar</button>
+                    if (res.ok) {
+                        alert("Producto eliminado");
+                        cargarCarrito(); // recargar productos después de eliminar
+                    } else {
+                        alert("Error al eliminar producto");
+                    }
+                } catch (error) {
+                    console.error("Error eliminando producto:", error);
+                }
+            }
+        }
 
-              
+        // Cuando cargue la página, que se carguen los productos
+        window.onload = cargarCarrito;
+    </script>
+
+    <button onclick="window.history.back()">⬅️ Regresar</button>
+
+
 </body>
+
 </html>
