@@ -12,11 +12,14 @@ http://127.0.0.1:8000/login
 
 
 ### Login
+## se envia el formualario en metodo post
+
+http://127.0.0.1:8000/
+
 
 ```json
 {
   "username": "cesar",
-  "email": "cesar@mail.com",
   "password": "123456"
 }
 ```
@@ -24,12 +27,13 @@ http://127.0.0.1:8000/login
 ```json
 {
   "statusCode": "200",
-  "message": "Usuario logeado exitosamente"
+  "message": "Bienvenid@ User_name"
 }
 ```
 
 
 ## register
+## se envia el formualario en metodo post
 
 http://127.0.0.1:8000/register
 
