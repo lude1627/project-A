@@ -1,61 +1,40 @@
-#rutaspara la creacion y para la vista de productos
-from fastapi import APIRouter, Form
-from Modulos.productos.logica.auth_consultP import create_product,all_categories,all_products, delete_product,update_product,view_product
- 
-from fastapi.responses import HTMLResponse, JSONResponse
+from fastapi import APIRouter
+from fastapi.responses import JSONResponse
+from pydantic import BaseModel
+from Modulos.productos.logica.auth_consultP import (  create_product, all_categories, all_products, delete_product, update_product, view_product
+)
 
 router = APIRouter()
 
-@router.get("/create_product", response_class=HTMLResponse)
-def create():
-    with open("Modulos/productos/view/create_product.html", "r", encoding="utf-8") as f:
-        html = f.read()
+class ProductCreate(BaseModel):
+    name: str
+    description: str
+    cant: int
+    price: float
+    category_id: int
 
-  
-    categorias = all_categories()
+class ProductUpdate(BaseModel):
+    id: int
+    name: str
+    description: str
+    category_id: int
+    cant: int
+    price: float
 
-   
-    if not categorias:
-   
-     options = '<option value="">No hay categorías disponibles</option>'
+
+
+@router.post("/create_product")
+def create_product_route(data: ProductCreate):
+    if create_product(data.name, data.description, data.cant, data.price, data.category_id):
+        return JSONResponse(content={
+            "success": True,
+            "message": "Producto creado exitosamente"
+        }, status_code=201)
     else:
-   
-     options = '<option value="">Seleccione una categoria</option>'
-    for c in categorias:
-        options += f'<option value="{c[0]}">{c[1]}</option>'
-
-
-    html = html.replace(
-    '<option value="">Seleccione una categoria</option>',
-        options
-)
-
-    return HTMLResponse(content=html)
-
-
-
-
-@router.post("/create_product", response_class=HTMLResponse)
-def create_product_route( 
-    name: str = Form(...),
-    description: str = Form(...),
-    cant: int = Form(...),
-    price: float = Form(...),
-    category_id: int = Form(...)
-):
-    if create_product(name, description, cant, price, category_id):
-        return HTMLResponse(
-            content="<script>alert('Producto creado exitosamente');window.location.href='/view_product';</script>",
-            status_code=200
-        )
-    else:
-        return HTMLResponse(content="<script>alert('Error al crear el producto');</script>", status_code=500)
-
-
-@router.get("/view_product", response_class=HTMLResponse)
-def view_product_page():
-    with open("Modulos/productos/view/view_product.html", "r", encoding="utf-8") as f:
-        return HTMLResponse(content=f.read())
+        return JSONResponse(content={
+            "success": False,
+            "message": "Error al crear el producto"
+        }, status_code=500)
 
 
 @router.get("/view_product/data")
@@ -74,55 +53,45 @@ def get_products():
     ]
     return JSONResponse(content=productos_json)
 
+
 @router.delete("/delete/{id}")
 def deleteP(id: int):
     delete_product(id)
-  
-    return {"message": "Producto eliminado con éxito"}
+    return JSONResponse(content={"message": "Producto eliminado con éxito"})
 
 
 @router.get("/get_product/{id}")
 def get_product(id: int):
     product = view_product(id)
     if not product:
-        return {"error": "Producto no encontrado"}
-    return {
+        return JSONResponse(content={"error": "Producto no encontrado"}, status_code=404)
+    return JSONResponse(content={
         "id": product[0],
         "name": product[1],
         "description": product[2],
         "cant": product[3],
         "price": product[4],
         "category_id": product[5]
-    }
+    })
 
 
-@router.get("/edit_product", response_class=HTMLResponse)
-def get_product_page():
-    with open("Modulos/productos/view/edit_product.html", "r", encoding="utf-8") as f:
-        return HTMLResponse(content=f.read())
-
-
-@router.post("/edit_product", response_class=HTMLResponse)
-def edit_product(
-    id: int = Form(...),
-    name: str = Form(...),
-    description: str = Form(...),
-    category_id: int = Form(...),
-    cant: int = Form(...),
-    price: float = Form(...)
-):
-     
-    if update_product(id, name, description, category_id, cant, price):
-        return HTMLResponse(
-            content=f"<script>alert('Producto actualizado exitosamente'); window.location.href='/updateP?id={id}';</script>"
-        )
+@router.put("/edit_product")
+def edit_product(data: ProductUpdate):
+    if update_product(data.id, data.name, data.description, data.category_id, data.cant, data.price):
+        return JSONResponse(content={
+            "success": True,
+            "message": "Producto actualizado exitosamente"
+        })
     else:
-        return HTMLResponse(
-            content=f"<script>alert('Error al actualizar producto'); window.location.href='/updateP?id={id}';</script>"
-        )
+        return JSONResponse(content={
+            "success": False,
+            "message": "Error al actualizar producto"
+        })
 
 
 @router.get("/all_categories")
 def get_all_categories():
-    categorias = all_categories()  
-    return [{"id": c[0], "name": c[1]} for c in categorias]
+    categorias = all_categories()
+    if not categorias:
+        return JSONResponse(content=[])
+    return JSONResponse(content=[{"id": c[0], "name": c[1]} for c in categorias])
