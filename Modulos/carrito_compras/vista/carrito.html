@@ -34,7 +34,7 @@
     // Función para cargar los productos del carrito
     async function cargarCarrito() {
         try {
-            const response = await fetch("/view_carrito/data"); // endpoint de tu API
+            const response = await fetch("/view_carrito/data"); 
             const carrito = await response.json();
 
             let rows = "";
@@ -60,29 +60,7 @@
             console.error("Error cargando productos:", error);
         }
     }
-
-    // Función para eliminar un producto
-    async function eliminarProducto(id) {
-        if (confirm("¿Seguro que deseas eliminar este producto del carrito?")) {
-            try {
-                const res = await fetch(`/cart/${id}`, {
-                    method: "DELETE"
-                });
-
-                if (res.ok) {
-                    alert("Producto eliminado");
-                    cargarCarrito(); // recargar productos después de eliminar
-                } else {
-                    alert("Error al eliminar producto");
-                }
-            } catch (error) {
-                console.error("Error eliminando producto:", error);
-            }
-        }
-    }
-
-    // Cuando cargue la página, que se carguen los productos
-    window.onload = cargarCarrito;
+    cargarCarrito();
 </script>
 
 <button onclick="window.history.back()">⬅️ Regresar</button>
