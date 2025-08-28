@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 28-08-2025 a las 19:13:05
+-- Tiempo de generación: 28-08-2025 a las 21:58:08
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.0.30
 
@@ -58,7 +58,8 @@ CREATE TABLE `usuarios` (
   `User_name` varchar(45) NOT NULL,
   `User_phone` int(11) NOT NULL,
   `User_mail` varchar(45) NOT NULL,
-  `User_passswrd` varchar(45) NOT NULL
+  `User_password` varchar(45) NOT NULL,
+  `usuarioscol` varchar(45) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --

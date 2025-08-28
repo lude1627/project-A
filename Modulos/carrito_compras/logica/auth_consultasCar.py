@@ -3,11 +3,7 @@ from Modulos.db import  execute_query
 #mostrar datos en tabla
 def get_items():
     query = """ 
-<<<<<<< HEAD
-        SELECT c.Car_id, p.Product_name, c.Car_Cantidad, p.Product_price AS precio, (c.Car_Cantidad * p.Product_price) AS subtotal
-=======
         SELECT c.Car_id, c.Car_Cantidad, p.Product_name, p.Product_price, (c.Car_Cantidad * p.Product_price)
->>>>>>> 11b3b44fcf2c887763e6059bb34b01fddeafd895
         FROM carrito c JOIN productos p ON c.Product_id = p.Product_id;
         """
     try:
@@ -18,13 +14,14 @@ def get_items():
             return False
     
 #eliminar
+def deleteProduct_carrito(Car_id: int):
+   
+    query = "DELETE FROM carrito WHERE Car_id = %s"
 
-def eliminar_producto_db(id: int) -> bool:
     try:
-        query = "DELETE FROM productos WHERE id = %s" 
-        execute_query(query,(id),commit=True)
-        return 
+        execute_query(query,(Car_id),commit=True)
+        return True
     except Exception as e:
-        print("Error al eliminar: {e}")
-        return False
+        print("Error al eliminar el producto: {e}")
+        return 
 

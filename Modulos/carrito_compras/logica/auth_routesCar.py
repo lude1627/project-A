@@ -30,3 +30,10 @@ def get_carrito():
         for c in carrito
     ]
     return JSONResponse(content=carrito_json)
+
+
+# @router.removecart("/deleteCar/{Car_id}")
+# def deleteProduct_carrito(Car_id: int):
+#     CartDelete(Car_id)
+  
+#     return {"message": "Se elimino el Producto del carrito con éxito"}
