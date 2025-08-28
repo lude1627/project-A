@@ -14,13 +14,14 @@ def get_items():
             return False
     
 #eliminar
+def deleteProduct_carrito(Car_id: int):
+   
+    query = "DELETE FROM carrito WHERE Car_id = %s"
 
-def eliminar_producto_db(id: int) -> bool:
     try:
-        query = "DELETE FROM productos WHERE id = %s" 
-        execute_query(query,(id),commit=True)
-        return 
+        execute_query(query,(Car_id),commit=True)
+        return True
     except Exception as e:
-        print("Error al eliminar: {e}")
-        return False
+        print("Error al eliminar el producto: {e}")
+        return 
 
