@@ -1,8 +1,7 @@
 from fastapi import APIRouter
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
-from Modulos.productos.logica.auth_consultP import (  create_product, all_categories, all_products, delete_product, update_product, view_product
-)
+from Modulos.productos.logica.auth_consultP import (create_product, all_categories, all_products, delete_product, update_product, view_product)
 
 router = APIRouter()
 
