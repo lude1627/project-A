@@ -1,7 +1,7 @@
 from Modulos.db import execute_query
 
 def login_user(username: str, password: str):
-    query = "SELECT * FROM usuario WHERE User_name = %s AND User_password = %s"
+    query = "SELECT * FROM usuarios WHERE User_name = %s AND User_password = %s"
     try:
         result = execute_query(query, (username, password), fetchone=True)
         return result
@@ -12,7 +12,7 @@ def login_user(username: str, password: str):
 
 def register_user(id: int, username: str, phone: int, email: str, password: str):
     query = """
-        INSERT INTO usuario (User_id, User_name, User_phone, User_mail, User_password) 
+        INSERT INTO usuarios (User_id, User_name, User_phone, User_mail, User_password) 
         VALUES (%s, %s, %s, %s, %s)
     """
     try:
@@ -25,7 +25,7 @@ def register_user(id: int, username: str, phone: int, email: str, password: str)
 
 def update_user(id: int, username: str, phone: int, email: str, password: str):
     query = """
-        UPDATE usuario 
+        UPDATE usuarios 
         SET User_name = %s, User_phone = %s, User_mail = %s, User_password = %s 
         WHERE User_id = %s
     """
@@ -38,7 +38,7 @@ def update_user(id: int, username: str, phone: int, email: str, password: str):
 
 
 def view_user(id: int):
-    query = "SELECT * FROM usuario WHERE User_id = %s"
+    query = "SELECT * FROM usuarios WHERE User_id = %s"
     try:
         result = execute_query(query, (id,), fetchone=True)
         return result
