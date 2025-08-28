@@ -7,7 +7,7 @@ python ft FastAPI
 La API DE `login` nos permite generar una session vigente para hacer consultas en la base de datos
 
 ## Base url
-http://127.0.0.1:8000/login
+http://127.0.0.1:8000/
 
 
 
