@@ -144,4 +144,4 @@ http://127.0.0.1:8000/category
 }
 ```
 ## metodo GET -> Para solicitar la informacion de categorias.
-## metodo POST -> Para crear nuesvas categorias.
+## metodo POST -> Para crear nuesvas categorias.123123
