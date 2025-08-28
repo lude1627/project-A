@@ -101,23 +101,27 @@
 
         // Función para eliminar un producto
         async function eliminarProducto(id) {
-            if (confirm("¿Seguro que deseas eliminar este producto del carrito?")) {
-                try {
-                    const res = await fetch(`/cart/${id}`, {
-                        method: "DELETE"
-                    });
+            if (!confirm("¿Seguro que deseas eliminar este producto?")) return;
 
-                    if (res.ok) {
-                        alert("Producto eliminado");
-                        cargarCarrito(); // recargar productos después de eliminar
-                    } else {
-                        alert("Error al eliminar producto");
-                    }
-                } catch (error) {
-                    console.error("Error eliminando producto:", error);
-                }
+            const res = await fetch(`/deleteCar/${Car_id}`, { method: "DELETE" });
+            if (!res.ok) {
+                alert("Error al eliminar el producto");
+                return;
             }
+            const data = await res.json();
+            alert(data.message);
+
+            cargarCarrito();
         }
+        // Función para calcular y mostrar el total
+        // function calcularTotal() {
+        //     let total = 0;
+        //     document.querySelectorAll("#carrito-body tr").forEach(row => {
+        //         const subtotal = parseFloat(row.cells[4].innerText.replace('$', ''));
+        //         total += subtotal;
+        //     });
+        //     document.getElementById("total").innerText = total.toFixed(2);
+        // }
 
         // Cuando cargue la página, que se carguen los productos
         window.onload = cargarCarrito;
