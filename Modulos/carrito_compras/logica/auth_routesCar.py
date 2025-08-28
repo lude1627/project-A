@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Form
 from fastapi.responses import HTMLResponse, JSONResponse
-from Modulos.carrito_compras.logica.auth_consultasCar import get_items,CartDelete
+from Modulos.carrito_compras.logica.auth_consultasCar import get_items
 
 router = APIRouter()
 
@@ -32,8 +32,8 @@ def get_carrito():
     return JSONResponse(content=carrito_json)
 
 
-@router.removecart("/deleteCar/{Car_id}")
-def deleteProduct_carrito(Car_id: int):
-    CartDelete(Car_id)
+# @router.removecart("/deleteCar/{Car_id}")
+# def deleteProduct_carrito(Car_id: int):
+#     CartDelete(Car_id)
   
-    return {"message": "Se elimino el Producto del carrito con éxito"}
+#     return {"message": "Se elimino el Producto del carrito con éxito"}
