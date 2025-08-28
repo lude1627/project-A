@@ -7,16 +7,18 @@ python ft FastAPI
 La API DE `login` nos permite generar una session vigente para hacer consultas en la base de datos
 
 ## Base url
-http://127.0.0.1:8000/login
+http://127.0.0.1:8000/
 
 
 
 ### Login
 
+http://127.0.0.1:8000/
+
+
 ```json
 {
   "username": "cesar",
-  "email": "cesar@mail.com",
   "password": "123456"
 }
 ```
@@ -24,16 +26,16 @@ http://127.0.0.1:8000/login
 ```json
 {
   "statusCode": "200",
-  "message": "Usuario logeado exitosamente"
+  "message": "Bienvenid@ User_name"
 }
 ```
+## metodo GET.
+
 
 
 ## register
 
 http://127.0.0.1:8000/register
-
-
 
 ```json
 {
@@ -51,6 +53,8 @@ http://127.0.0.1:8000/register
   "message": "Usuario registrado exitosamente"
 }
 ```
+## metodo POST.
+
 
 
 ## actualizar usuario
@@ -73,7 +77,7 @@ http://127.0.0.1:8000/updateP
   "message": "Usuario actualizado exitosamente"
 }
 ```
-##  se pueden modificar datos los actualiza
+## metodo POST.
 
 
 
@@ -93,6 +97,8 @@ http://127.0.0.1:8000/view_product
   "message": "Se muestra la lista de productos en forma de tabla"
 }
 ```
+## metodo GET.
+
 
 
 ## Agregar producto
@@ -116,7 +122,7 @@ http://127.0.0.1:8000/create_product
   "message": "producto creado exitosamente"
 }
 ```
-
+## metodo POST.
 
 
 
@@ -137,3 +143,5 @@ http://127.0.0.1:8000/category
   "message": "categoria creada exitosamente"
 }
 ```
+## metodo GET -> Para solicitar la informacion de categorias.
+## metodo POST -> Para crear nuesvas categorias.123123
