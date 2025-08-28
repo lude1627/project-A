@@ -48,19 +48,11 @@
     <h3>Total: $<span id="total">0</span></h3>
 
     <script>
-<<<<<<< HEAD
-    // Función para cargar los productos del carrito
-    async function cargarCarrito() {
-        try {
-            const response = await fetch("/view_carrito/data"); 
-            const carrito = await response.json();
-=======
         // Función para cargar los productos del carrito
         async function cargarCarrito() {
             try {
                 const response = await fetch("/view_carrito/data"); // endpoint de tu API
                 const carrito = await response.json();
->>>>>>> 11b3b44fcf2c887763e6059bb34b01fddeafd895
 
                 let rows = "";
                 carrito.forEach(c => {
@@ -76,19 +68,6 @@
                         </td>
                     </tr>
                 `;
-<<<<<<< HEAD
-            });
-
-            // Pintar las filas en el tbody de la tabla
-            document.getElementById("carrito-body").innerHTML = rows;
-
-        } catch (error) {
-            console.error("Error cargando productos:", error);
-        }
-    }
-    cargarCarrito();
-</script>
-=======
                 });
 
                 // Pintar las filas en el tbody de la tabla
@@ -128,7 +107,6 @@
     </script>
 
     <button onclick="window.history.back()">⬅️ Regresar</button>
->>>>>>> 11b3b44fcf2c887763e6059bb34b01fddeafd895
 
 
 </body>
