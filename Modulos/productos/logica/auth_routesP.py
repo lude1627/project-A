@@ -15,15 +15,20 @@ def create():
     categorias = all_categories()
 
    
-    options = '<option value="">Seleccione una categoria</option>'
+    if not categorias:
+   
+     options = '<option value="">No hay categorías disponibles</option>'
+    else:
+   
+     options = '<option value="">Seleccione una categoria</option>'
     for c in categorias:
         options += f'<option value="{c[0]}">{c[1]}</option>'
 
-    
+
     html = html.replace(
-        '<option value="">Seleccione una categoria</option>',
+    '<option value="">Seleccione una categoria</option>',
         options
-    )
+)
 
     return HTMLResponse(content=html)
 

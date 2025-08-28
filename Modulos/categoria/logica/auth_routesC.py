@@ -22,6 +22,11 @@ def create_category(id: int = Form(...), name: str = Form(...)):
 @router.get("/view_category/data")
 def get_category():
     categoria = all_categories()
+    if not categoria:  # si no hay categorías
+        return JSONResponse(content=[{
+            "Cat_id": 0,
+            "Cat_name": "Sin categorías disponibles"
+        }])
     category_json = [
         {
             "Cat_id": cat[0],

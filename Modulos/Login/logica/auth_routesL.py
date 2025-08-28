@@ -1,64 +1,85 @@
-from fastapi import APIRouter, Form
-from fastapi.responses import HTMLResponse
+from fastapi import APIRouter
+from fastapi.responses import JSONResponse
+from pydantic import BaseModel
 from Modulos.Login.logica.auth_consultL import login_user, register_user, update_user, view_user
 
 router = APIRouter()
 
 
-@router.get("/", response_class=HTMLResponse)
-def loger():
-    with open("Modulos/Login/vista/login.html", "r", encoding="utf-8") as f:
-        return HTMLResponse(content=f.read())
+class LoginModel(BaseModel):
+    username: str
+    password: str
+
+class RegisterModel(BaseModel):
+    id: int
+    username: str
+    phone: int
+    email: str
+    password: str
+
+class UpdateUserModel(BaseModel):
+    id: int
+    username: str
+    phone: int
+    email: str
+    password: str
 
 
-@router.post("/login", response_class=HTMLResponse)
-def login(username: str = Form(...), password: str = Form(...)):
-    user = login_user(username, password)
+
+@router.post("/login")
+def login(data: LoginModel):
+    user = login_user(data.username, data.password)
     if user:
-        user_id = user[0] 
-        return HTMLResponse(content=f"<script>alert('Bienvenid@ {username}'); window.location.href='/updateP?id={user_id}';</script>")
+        user_id = user[0]
+        return JSONResponse(content={
+            "success": True,
+            "message": f"Bienvenid@ {data.username}",
+            "user_id": user_id
+        })
     else:
-        return HTMLResponse(content="<script>alert('Usuario o contraseña incorrectos'); window.location.href='/';</script>")
+        return JSONResponse(content={
+            "success": False,
+            "message": "Usuario o contraseña incorrectos"
+        })
 
 
-
-@router.get("/register", response_class=HTMLResponse)
-def register():
-    with open("Modulos/Login/vista/registro.html", "r", encoding="utf-8") as f:
-        return HTMLResponse(content=f.read())
-
-
-@router.post("/register", response_class=HTMLResponse)
-def register(id: int = Form(...), username: str = Form(...), phone: int = Form(...), email: str = Form(...), password: str = Form(...)):
-    if register_user(id, username, phone, email, password):
-        return HTMLResponse(content="<script>alert('Usuario registrado exitosamente'); window.location.href='/';</script>")
+@router.post("/register")
+def register(data: RegisterModel):
+    if register_user(data.id, data.username, data.phone, data.email, data.password):
+        return JSONResponse(content={
+            "success": True,
+            "message": "Usuario registrado exitosamente"
+        })
     else:
-        return HTMLResponse(content="<script>alert('Error al registrar usuario'); window.location.href='/register';</script>")    
+        return JSONResponse(content={
+            "success": False,
+            "message": "Error al registrar usuario"
+        })
 
 
 @router.get("/get_user/{id}")
 def get_user_json(id: int):
     user = view_user(id)
     if not user:
-        return {"error": "Usuario no encontrado"}
-    return {
+        return JSONResponse(content={"error": "Usuario no encontrado"}, status_code=404)
+    return JSONResponse(content={
         "id": user[0],
         "username": user[1],
         "phone": user[2],
         "email": user[3],
         "password": user[4]
-    }
-@router.get("/updateP", response_class=HTMLResponse)
-def get_user_page():
-    with open("Modulos/Login/vista/perfil.html", "r", encoding="utf-8") as f:
-        return HTMLResponse(content=f.read())
+    })
 
 
-
-@router.post("/updateP", response_class=HTMLResponse)
-def updateP(id: int = Form(...), username: str = Form(...), phone: int = Form(...), email: str = Form(...), password: str = Form(...)):
-    if update_user(id, username, phone, email, password):
-        return HTMLResponse(content=f"<script>alert('Usuario actualizado exitosamente'); window.location.href='/updateP?id={id}';</script>")
+@router.post("/updateP")
+def updateP(data: UpdateUserModel):
+    if update_user(data.id, data.username, data.phone, data.email, data.password):
+        return JSONResponse(content={
+            "success": True,
+            "message": "Usuario actualizado exitosamente"
+        })
     else:
-        return HTMLResponse(content=f"<script>alert('Error al actualizar usuario'); window.location.href='/updateP?id={id}';</script>")
-
+        return JSONResponse(content={
+            "success": False,
+            "message": "Error al actualizar usuario"
+        })
