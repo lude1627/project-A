@@ -92,5 +92,5 @@ def edit_product(data: ProductUpdate):
 def get_all_categories():
     categorias = all_categories()
     if not categorias:
-        return JSONResponse(content=[])
+        return JSONResponse({"message: " "no hay datos"}, 404)
     return JSONResponse(content=[{"id": c[0], "name": c[1]} for c in categorias])
