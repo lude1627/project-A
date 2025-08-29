@@ -29,7 +29,7 @@ http://127.0.0.1:8000/
   "message": "Bienvenid@ User_name"
 }
 ```
-## metodo GET.
+## metodo POST.
 
 
 
