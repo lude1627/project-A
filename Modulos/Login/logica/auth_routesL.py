@@ -3,8 +3,8 @@ from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 from Modulos.Login.logica.auth_consultL import login_user, register_user, update_user, view_user
 
-router = APIRouter()
 
+router = APIRouter()
 
 class LoginModel(BaseModel):
     username: str
