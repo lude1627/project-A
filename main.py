@@ -14,6 +14,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+    
 app.include_router(auth_routesL.router)
 app.include_router(auth_routesC.router)
 app.include_router(auth_routesP.router)
