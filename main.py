@@ -8,6 +8,7 @@ from Modulos.carrito_compras.logica import auth_routesCar
 app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
+    # allow_origins=["https://project-a-2.pages.dev"],
     allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
