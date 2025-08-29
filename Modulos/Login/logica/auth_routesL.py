@@ -67,7 +67,7 @@ def get_user_json(id: int):
         "username": user[1],
         "phone": user[2],
         "email": user[3],
-        "password": user[4]
+        "password": user[4] 
     })
 
 
