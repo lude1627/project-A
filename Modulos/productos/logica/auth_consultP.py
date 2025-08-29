@@ -33,9 +33,8 @@ def all_products():
         products = execute_query(query,fetchall=True)
         return products
     except Exception as e:
-        print("Error al mostrar productos: {e}")
-        return None
-
+        print(f"Error al mostrar productos: {e}") 
+        return []   
 
 
 def update_product(id: int, name: str, description: str, cant: int, price: float, cat_id: int) -> bool:
